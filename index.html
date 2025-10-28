@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>KONIMER PREMIUM</title>
 
+<!-- Cinzel Decorative shrift -->
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
 
 <style>
@@ -31,14 +32,17 @@
     z-index: -1;
   }
 
+  /* KONIMER PREMIUM sarlavhasi */
   h1 {
     font-family: 'Cinzel Decorative', serif;
     font-size: 2.4em;
+    letter-spacing: 2px;
     color: #ffd700;
     text-shadow: 0 0 15px #ffcc00, 0 0 25px #b8860b;
     margin-bottom: 15px;
   }
 
+  /* Tugmalar (kichikroq va ixchamroq) */
   a {
     display: block;
     text-decoration: none;
@@ -54,6 +58,7 @@
     transition: all 0.3s ease;
   }
 
+  /* Shaxsiy hisob va Qo‘ng‘iroq tugmalari */
   .special {
     background: linear-gradient(135deg, #ffcc33, #caa30a);
     box-shadow: 0 0 12px #ffcc33;
@@ -78,11 +83,13 @@
     color: #999;
   }
 
+  /* Logotip */
   .logo {
     width: 120px;
     height: auto;
     margin-bottom: 10px;
   }
+
 </style>
 </head>
 <body>
@@ -96,79 +103,77 @@
 <a href="https://t.me/+VmvgNbHFGWs4Y2Yy" target="_blank">Telegram</a>
 <a href="https://www.instagram.com/ru.raximboyev" target="_blank">Instagram</a>
 <a href="https://www.tiktok.com/@umid_totsamiy" target="_blank">TikTok</a>
+<a href="https://t.me/konimer"target="_blank" class="special">🔐 Shaxsiy hisob</a>
 
 <p>💳 To‘lovlar tez kunda yo‘lga qo‘yiladi...</p>
 
 <a href="tel:+998947370714" class="special">📞 Qo‘ng‘iroq qilish</a>
 <a href="https://maps.app.goo.gl/Xw6qCGbRChdDnebp9" target="_blank">📍 Manzilni ko‘rish</a>
 
-<footer>© 2025 KONIMER PREMIUM MCHJ | Raximboyev Umidjon</footer>
+<footer>© 2025 KONIMER PREMIUM | Raximboyev Umidjon</footer>
 
-<!-- Quyidagi script to‘g‘ri ishlashi uchun uni aynan shu tarzda yoz -->
-<script type="text/javascript">
-const canvas = document.getElementById("particles");
-const ctx = canvas.getContext("2d");
-let particlesArray;
+<script>
+  // Harakatli zarrachalar (oltin fon)
+  const canvas = document.getElementById("particles");
+  const ctx = canvas.getContext("2d");
+  let particlesArray;
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-window.addEventListener("resize", function() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
-  init();
-});
 
-class Particle {
-  constructor(x, y, size, speedX, speedY) {
-    this.x = x;
-    this.y = y;
-    this.size = size;
-    this.speedX = speedX;
-    this.speedY = speedY;
-  }
-  update() {
-    this.x += this.speedX;
-    this.y += this.speedY;
-    if (this.x > canvas.width || this.x < 0) this.speedX *= -1;
-    if (this.y > canvas.height || this.y < 0) this.speedY *= -1;
-  }
-  draw() {
-    ctx.fillStyle = "rgba(255, 215, 0, 0.8)";
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-    ctx.fill();
-  }
-}
-
-function init() {
-  particlesArray = [];
-  const numParticles = 50;
-  for (let i = 0; i < numParticles; i++) {
-    const size = Math.random() * 3 + 1;
-    const x = Math.random() * canvas.width;
-    const y = Math.random() * canvas.height;
-    const speedX = (Math.random() - 0.5) * 1.2;
-    const speedY = (Math.random() - 0.5) * 1.2;
-    particlesArray.push(new Particle(x, y, size, speedX, speedY));
-  }
-}
-
-function animate() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  particlesArray.forEach(p => {
-    p.update();
-    p.draw();
+  window.addEventListener("resize", function() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    init();
   });
-  requestAnimationFrame(animate);
-}
 
-init();
-animate();
+  class Particle {
+    constructor(x, y, size, speedX, speedY) {
+      this.x = x;
+      this.y = y;
+      this.size = size;
+      this.speedX = speedX;
+      this.speedY = speedY;
+    }
+    update() {
+      this.x += this.speedX;
+      this.y += this.speedY;
+      if (this.x > canvas.width || this.x < 0) this.speedX *= -1;
+      if (this.y > canvas.height || this.y < 0) this.speedY *= -1;
+    }
+    draw() {
+      ctx.fillStyle = "rgba(255, 215, 0, 0.8)";
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  function init() {
+    particlesArray = [];
+    const numParticles = 50;
+    for (let i = 0; i < numParticles; i++) {
+      const size = Math.random() * 3 + 1;
+      const x = Math.random() * canvas.width;
+      const y = Math.random() * canvas.height;
+      const speedX = (Math.random() - 0.5) * 1.2;
+      const speedY = (Math.random() - 0.5) * 1.2;
+      particlesArray.push(new Particle(x, y, size, speedX, speedY));
+    }
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particlesArray.forEach(p => {
+      p.update();
+      p.draw();
+    });
+    requestAnimationFrame(animate);
+  }
+
+  init();
+  animate();
 </script>
 
 </body>
 </html>
-
-    
-
