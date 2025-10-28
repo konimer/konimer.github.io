@@ -23,13 +23,15 @@
     text-align: center;
   }
 
+  /* Zarrachalar uchun canvas — ustida bo‘lishi uchun yuqori z-index */
   canvas {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: -1;
+    z-index: 2; /* rasm ustidan yuradi */
+    pointer-events: none;
   }
 
   /* KONIMER PREMIUM sarlavhasi */
@@ -40,9 +42,11 @@
     color: #ffd700;
     text-shadow: 0 0 15px #ffcc00, 0 0 25px #b8860b;
     margin-bottom: 15px;
+    z-index: 3;
+    position: relative;
   }
 
-  /* Tugmalar (kichikroq va ixchamroq) */
+  /* Tugmalar */
   a {
     display: block;
     text-decoration: none;
@@ -56,9 +60,10 @@
     font-size: 0.95em;
     box-shadow: 0 0 8px #ffd700;
     transition: all 0.3s ease;
+    z-index: 3;
+    position: relative;
   }
 
-  /* Shaxsiy hisob va Qo‘ng‘iroq tugmalari */
   .special {
     background: linear-gradient(135deg, #ffcc33, #caa30a);
     box-shadow: 0 0 12px #ffcc33;
@@ -75,29 +80,60 @@
     color: #ccc;
     margin-top: 8px;
     font-size: 0.9em;
+    z-index: 3;
+    position: relative;
   }
 
   footer {
     margin-top: 15px;
     font-size: 0.75em;
     color: #999;
+    z-index: 3;
+    position: relative;
   }
 
-  /* Logotip */
-  .logo {
-    width: 120px;
-    height: auto;
+  /* --- LOGOTIP + RAMKA --- */
+  .logo-container {
+    position: relative;
+    display: inline-block;
+    z-index: 3;
     margin-bottom: 10px;
   }
 
+  .logo {
+    width: 120px;
+    height: auto;
+    border-radius: 10px;
+    display: block;
+  }
+
+  /* Oltin ramka (4 burchakli) */
+  .logo-container::before {
+    content: "";
+    position: absolute;
+    top: -6px;
+    left: -6px;
+    right: -6px;
+    bottom: -6px;
+    border: 3px solid #ffd700;
+    border-radius: 14px;
+    box-shadow: 0 0 15px #ffd700, 0 0 30px #b8860b;
+    animation: glow 2s infinite alternate;
+  }
+
+  @keyframes glow {
+    from { box-shadow: 0 0 8px #b8860b, 0 0 18px #ffd700; }
+    to { box-shadow: 0 0 20px #ffcc33, 0 0 40px #ffd700; }
+  }
 </style>
 </head>
 <body>
 
 <canvas id="particles"></canvas>
 
-<img src="https://raw.githubusercontent.com/konimer/konimer.github.io/main/il_fullxfull.4822568259_hylg.jpg" alt="KONIMER logo" class="logo">
-  
+<div class="logo-container">
+  <img src="https://raw.githubusercontent.com/konimer/konimer.github.io/main/il_fullxfull.4822568259_hylg.jpg" alt="KONIMER logo" class="logo">
+</div>
 
 <h1>KONIMER PREMIUM</h1>
 
@@ -152,7 +188,7 @@
 
   function init() {
     particlesArray = [];
-    const numParticles = 50;
+    const numParticles = 60;
     for (let i = 0; i < numParticles; i++) {
       const size = Math.random() * 3 + 1;
       const x = Math.random() * canvas.width;
