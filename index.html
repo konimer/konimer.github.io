@@ -32,6 +32,7 @@
     z-index: -1;
   }
 
+  /* KONIMER PREMIUM sarlavhasi */
   h1 {
     font-family: 'Cinzel Decorative', serif;
     font-size: 2.4em;
@@ -41,6 +42,7 @@
     margin-bottom: 15px;
   }
 
+  /* Tugmalar (kichikroq va ixchamroq) */
   a {
     display: block;
     text-decoration: none;
@@ -56,6 +58,7 @@
     transition: all 0.3s ease;
   }
 
+  /* Maxsus oltin tugmalar */
   .special {
     background: linear-gradient(135deg, #ffcc33, #caa30a);
     box-shadow: 0 0 12px #ffcc33;
@@ -80,35 +83,38 @@
     color: #999;
   }
 
+  /* Logotip */
   .logo {
     width: 120px;
     height: auto;
     margin-bottom: 10px;
   }
-
 </style>
 </head>
 <body>
 
 <canvas id="particles"></canvas>
 
-<!-- Logo nomi fayl bilan mos: 1000007549.jpg -->
-<img src="1000007549.jpg" alt="KONIMER logotip" class="logo">
+<img src="logo.png" alt="KONIMER logotip" class="logo">
 
 <h1>KONIMER PREMIUM</h1>
 
+<!-- Yangi Telegram tugmasi -->
 <a href="https://t.me/+VmvgNbHFGWs4Y2Yy" target="_blank">Telegram</a>
+
 <a href="https://www.instagram.com/ru.raximboyev" target="_blank">Instagram</a>
 <a href="https://www.tiktok.com/@umid_totsamiy" target="_blank">TikTok</a>
+<a href="https://maps.app.goo.gl/Xw6qCGbRChdDnebp9" target="_blank">📍 Manzilni ko‘rish</a>
 
 <p>💳 To‘lovlar tez kunda yo‘lga qo‘yiladi...</p>
 
 <a href="tel:+998947370714" class="special">📞 Qo‘ng‘iroq qilish</a>
-<a href="https://maps.app.goo.gl/Xw6qCGbRChdDnebp9" target="_blank">📍 Manzilni ko‘rish</a>
+<a href="https://t.me/konimer" target="_blank" class="special">🔐 Shaxsiy hisob</a>
 
-<footer>© 2025 KONIMER PREMIUM MCHJ | Raximboyev Umidjon</footer
+<footer>© 2025 KONIMER PREMIUM MCHJ | Raximboyev Umidjon</footer>
 
 <script>
+  // Harakatli zarrachalar (oltin fon)
   const canvas = document.getElementById("particles");
   const ctx = canvas.getContext("2d");
   let particlesArray;
@@ -143,6 +149,7 @@
       ctx.fill();
     }
   }
+
   function init() {
     particlesArray = [];
     const numParticles = 50;
@@ -171,3 +178,4 @@
 
 </body>
 </html>
+
