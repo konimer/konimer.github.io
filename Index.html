@@ -4,8 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>KONIMER PREMIUM</title>
-
-<!-- Cinzel Decorative shrift -->
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
 
 <style>
@@ -23,18 +21,16 @@
     text-align: center;
   }
 
-  /* Zarrachalar uchun canvas — ustida bo‘lishi uchun yuqori z-index */
   canvas {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 2; /* rasm ustidan yuradi */
+    z-index: 1;
     pointer-events: none;
   }
 
-  /* KONIMER PREMIUM sarlavhasi */
   h1 {
     font-family: 'Cinzel Decorative', serif;
     font-size: 2.4em;
@@ -46,53 +42,46 @@
     position: relative;
   }
 
-  /* Tugmalar */
-  a {
-    display: block;
-    text-decoration: none;
-    color: black;
+  nav {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    z-index: 3;
+    position: relative;
+  }
+
+  nav button {
     background: linear-gradient(135deg, #ffd700, #b8860b);
+    border: none;
+    border-radius: 8px;
     padding: 8px 15px;
-    border-radius: 10px;
-    margin: 6px 0;
-    width: 190px;
     font-weight: 600;
-    font-size: 0.95em;
-    box-shadow: 0 0 8px #ffd700;
+    color: black;
+    cursor: pointer;
     transition: all 0.3s ease;
-    z-index: 3;
-    position: relative;
   }
 
-  .special {
-    background: linear-gradient(135deg, #ffcc33, #caa30a);
-    box-shadow: 0 0 12px #ffcc33;
-  }
-
-  a:hover {
-    background: linear-gradient(135deg, #ffcc00, #ffb300);
-    box-shadow: 0 0 18px #ffcc00;
+  nav button:hover {
     transform: scale(1.05);
+    box-shadow: 0 0 15px #ffd700;
   }
 
-  p {
-    font-style: italic;
-    color: #ccc;
-    margin-top: 8px;
-    font-size: 0.9em;
+  .page {
+    display: none;
+    animation: fade 0.6s ease;
     z-index: 3;
     position: relative;
   }
 
-  footer {
-    margin-top: 15px;
-    font-size: 0.75em;
-    color: #999;
-    z-index: 3;
-    position: relative;
+  .active {
+    display: block;
   }
 
-  /* --- LOGOTIP + RAMKA --- */
+  @keyframes fade {
+    from {opacity: 0;}
+    to {opacity: 1;}
+  }
+
   .logo-container {
     position: relative;
     display: inline-block;
@@ -102,12 +91,9 @@
 
   .logo {
     width: 120px;
-    height: auto;
     border-radius: 10px;
-    display: block;
   }
 
-  /* Oltin ramka (4 burchakli) */
   .logo-container::before {
     content: "";
     position: absolute;
@@ -125,6 +111,33 @@
     from { box-shadow: 0 0 8px #b8860b, 0 0 18px #ffd700; }
     to { box-shadow: 0 0 20px #ffcc33, 0 0 40px #ffd700; }
   }
+
+  a {
+    display: inline-block;
+    text-decoration: none;
+    color: black;
+    background: linear-gradient(135deg, #ffd700, #b8860b);
+    padding: 8px 15px;
+    border-radius: 10px;
+    margin: 6px;
+    font-weight: 600;
+    font-size: 0.9em;
+    box-shadow: 0 0 8px #ffd700;
+    transition: all 0.3s ease;
+  }
+
+  a:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px #ffd700;
+  }
+
+  footer {
+    margin-top: 15px;
+    font-size: 0.75em;
+    color: #999;
+    z-index: 3;
+    position: relative;
+  }
 </style>
 </head>
 <body>
@@ -137,79 +150,97 @@
 
 <h1>KONIMER PREMIUM</h1>
 
-<a href="https://t.me/+VmvgNbHFGWs4Y2Yy" target="_blank">Telegram</a>
-<a href="https://www.instagram.com/ru.raximboyev" target="_blank">Instagram</a>
-<a href="https://www.tiktok.com/@umid_totsamiy" target="_blank">TikTok</a>
-<a href="https://t.me/konimer" target="_blank" class="special">🔐 Shaxsiy hisob</a>
+<nav>
+  <button onclick="showPage('home')">Asosiy</button>
+  <button onclick="showPage('about')">Biz haqimizda</button>
+  <button onclick="showPage('contact')">Bog‘lanish</button>
+</nav>
 
-<p>💳 To‘lovlar tez kunda yo‘lga qo‘yiladi...</p>
+<!-- Sahifalar -->
+<div id="home" class="page active">
+  <a href="https://t.me/+VmvgNbHFGWs4Y2Yy" target="_blank">Telegram</a>
+  <a href="https://www.instagram.com/ru.raximboyev" target="_blank">Instagram</a>
+  <a href="https://www.tiktok.com/@umid_totsamiy" target="_blank">TikTok</a>
+</div>
 
-<a href="tel:+998947370714" class="special">📞 Qo‘ng‘iroq qilish</a>
-<a href="https://maps.app.goo.gl/Xw6qCGbRChdDnebp9" target="_blank">📍 Manzilni ko‘rish</a>
+<div id="about" class="page">
+  <p>KONIMER PREMIUM — bu zamonaviy va sifatli loyihalar platformasi. Biz innovatsiya, dizayn va ishonchlilikni uyg‘unlashtiramiz.</p>
+</div>
+
+<div id="contact" class="page">
+  <a href="tel:+998947370714">📞 Qo‘ng‘iroq qilish</a>
+  <a href="https://maps.app.goo.gl/Xw6qCGbRChdDnebp9" target="_blank">📍 Manzilni ko‘rish</a>
+  <p>💳 To‘lovlar tez kunda yo‘lga qo‘yiladi...</p>
+</div>
 
 <footer>© 2025 KONIMER PREMIUM | Raximboyev Umidjon</footer>
 
 <script>
-  // Harakatli zarrachalar (oltin fon)
-  const canvas = document.getElementById("particles");
-  const ctx = canvas.getContext("2d");
-  let particlesArray;
+function showPage(pageId) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(pageId).classList.add('active');
+}
 
+// Zarrachalar
+const canvas = document.getElementById("particles");
+const ctx = canvas.getContext("2d");
+let particlesArray;
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+window.addEventListener("resize", function() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
-
-  window.addEventListener("resize", function() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    init();
-  });
-
-  class Particle {
-    constructor(x, y, size, speedX, speedY) {
-      this.x = x;
-      this.y = y;
-      this.size = size;
-      this.speedX = speedX;
-      this.speedY = speedY;
-    }
-    update() {
-      this.x += this.speedX;
-      this.y += this.speedY;
-      if (this.x > canvas.width || this.x < 0) this.speedX *= -1;
-      if (this.y > canvas.height || this.y < 0) this.speedY *= -1;
-    }
-    draw() {
-      ctx.fillStyle = "rgba(255, 215, 0, 0.8)";
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-      ctx.fill();
-    }
-  }
-
-  function init() {
-    particlesArray = [];
-    const numParticles = 60;
-    for (let i = 0; i < numParticles; i++) {
-      const size = Math.random() * 3 + 1;
-      const x = Math.random() * canvas.width;
-      const y = Math.random() * canvas.height;
-      const speedX = (Math.random() - 0.5) * 1.2;
-      const speedY = (Math.random() - 0.5) * 1.2;
-      particlesArray.push(new Particle(x, y, size, speedX, speedY));
-    }
-  }
-
-  function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    particlesArray.forEach(p => {
-      p.update();
-      p.draw();
-    });
-    requestAnimationFrame(animate);
-  }
-
   init();
-  animate();
+});
+
+class Particle {
+  constructor(x, y, size, speedX, speedY) {
+    this.x = x;
+    this.y = y;
+    this.size = size;
+    this.speedX = speedX;
+    this.speedY = speedY;
+  }
+  update() {
+    this.x += this.speedX;
+    this.y += this.speedY;
+    if (this.x > canvas.width || this.x < 0) this.speedX *= -1;
+    if (this.y > canvas.height || this.y < 0) this.speedY *= -1;
+  }
+  draw() {
+    ctx.fillStyle = "rgba(255, 215, 0, 0.8)";
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+function init() {
+  particlesArray = [];
+  const numParticles = 60;
+  for (let i = 0; i < numParticles; i++) {
+    const size = Math.random() * 3 + 1;
+    const x = Math.random() * canvas.width;
+    const y = Math.random() * canvas.height;
+    const speedX = (Math.random() - 0.5) * 1.2;
+    const speedY = (Math.random() - 0.5) * 1.2;
+    particlesArray.push(new Particle(x, y, size, speedX, speedY));
+  }
+}
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particlesArray.forEach(p => {
+    p.update();
+    p.draw();
+  });
+  requestAnimationFrame(animate);
+}
+
+init();
+animate();
 </script>
 
 </body>
