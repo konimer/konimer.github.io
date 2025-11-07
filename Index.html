@@ -1,247 +1,734 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KONIMER PREMIUM</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="description" content="KONIMER PREMIUM - Futuristic dizayn va texnologiya studiyasi" />
+<meta name="keywords" content="konimer, premium, dizayn, texnologiya, futuristic" />
+<title>KONIMER PREMIUM — Futuristic</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
-
 <style>
-  body {
+  /* CSS Variables - Optimized */
+  :root {
+    /* Colors */
+    --bg-primary: #000;
+    --gold-primary: #ffd700;
+    --gold-secondary: #ffb300;
+    --text-muted: #bfbfbf;
+    --panel-bg: rgba(255,255,255,0.04);
+    
+    /* Spacing */
+    --space-xs: 8px;
+    --space-sm: 12px;
+    --space-md: 18px;
+    --space-lg: 28px;
+    --space-xl: 32px;
+    
+    /* Shadows */
+    --shadow-gold: 0 8px 40px rgba(255,183,0,0.08);
+    --shadow-card: 0 10px 30px rgba(0,0,0,0.6);
+    --shadow-button: 0 6px 22px rgba(255,180,0,0.08);
+    
+    /* Transitions */
+    --transition-fast: 0.18s ease;
+    --transition-smooth: 0.45s cubic-bezier(.2,.9,.2,1);
+    --transition-slow: 0.8s cubic-bezier(.2,.9,.2,1);
+  }
+
+  /* Reset and Base Styles */
+  * { 
+    box-sizing: border-box;
     margin: 0;
-    height: 100vh;
-    background-color: #000;
-    overflow: hidden;
-    color: #ffd700;
-    font-family: 'Poppins', sans-serif;
+    padding: 0;
+  }
+  
+  html, body {
+    height: 100%;
+    background: var(--bg-primary);
+    font-family: Inter, system-ui, -apple-system, "Poppins", sans-serif;
+    color: var(--gold-primary);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Skip Link for Accessibility */
+  .skip-link {
+    position: absolute;
+    top: -40px;
+    left: var(--space-sm);
+    background: var(--gold-primary);
+    color: #000;
+    padding: var(--space-xs);
+    text-decoration: none;
+    font-weight: 700;
+    border-radius: 4px;
+    z-index: 10000;
+    transition: top 0.3s;
+  }
+  
+  .skip-link:focus {
+    top: var(--space-sm);
+  }
+
+  /* Loader Styles */
+  .loader-wrap {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(180deg, rgba(0,0,0,1), rgba(0,0,0,0.9));
+    z-index: 9999;
+    backdrop-filter: blur(2px);
+    transition: opacity var(--transition-slow), visibility var(--transition-slow);
+  }
+  
+  .loader {
+    text-align: center;
+    transform: translateY(-10px);
+    will-change: transform;
+  }
+  
+  .loader .logo {
+    width: 140px;
+    border-radius: var(--space-sm);
+    box-shadow: var(--shadow-gold), inset 0 0 var(--space-sm) rgba(255,215,0,0.12);
+    animation: logoPulse 2.8s infinite ease-in-out;
+    border: 2px solid rgba(255,215,0,0.12);
+  }
+  
+  @keyframes logoPulse {
+    0% { transform: scale(0.95) rotateX(0); }
+    50% { transform: scale(1.03) rotateX(6deg); }
+    100% { transform: scale(0.95) rotateX(0); }
+  }
+  
+  .loader h2 {
+    margin: var(--space-sm) 0 0;
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 22px;
+    letter-spacing: 2px;
+    background: linear-gradient(90deg, var(--gold-primary), var(--gold-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .loader small {
+    display: block;
+    color: var(--text-muted);
+    margin-top: var(--space-xs);
+    font-size: 13px;
+  }
+
+  /* Main Layout */
+  .app {
+    position: relative;
+    min-height: 100vh;
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    text-align: center;
+    justify-content: flex-start;
+    padding: var(--space-xl) 20px 60px;
+    z-index: 2;
   }
 
-  canvas {
+  /* Particles Canvas */
+  canvas#particles {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 1;
+    z-index: 5;
     pointer-events: none;
+    will-change: transform;
   }
 
-  h1 {
-    font-family: 'Cinzel Decorative', serif;
-    font-size: 2.4em;
-    letter-spacing: 2px;
-    color: #ffd700;
-    text-shadow: 0 0 15px #ffcc00, 0 0 25px #b8860b;
-    margin-bottom: 15px;
-    z-index: 3;
-    position: relative;
-  }
-
-  nav {
+  /* Topbar Styles */
+  .topbar {
+    width: 100%;
+    max-width: 1100px;
     display: flex;
-    gap: 10px;
-    margin-bottom: 15px;
-    z-index: 3;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+    z-index: 10;
     position: relative;
   }
-
-  nav button {
-    background: linear-gradient(135deg, #ffd700, #b8860b);
-    border: none;
-    border-radius: 8px;
-    padding: 8px 15px;
-    font-weight: 600;
-    color: black;
-    cursor: pointer;
-    transition: all 0.3s ease;
+  
+  .left-controls {
+    display: flex;
+    align-items: center;
+    gap: 14px;
   }
-
-  nav button:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 15px #ffd700;
-  }
-
-  .page {
-    display: none;
-    animation: fade 0.6s ease;
-    z-index: 3;
-    position: relative;
-  }
-
-  .active {
-    display: block;
-  }
-
-  @keyframes fade {
-    from {opacity: 0;}
-    to {opacity: 1;}
-  }
-
+  
   .logo-container {
     position: relative;
     display: inline-block;
-    z-index: 3;
-    margin-bottom: 10px;
   }
-
-  .logo {
+  
+  .logo-container img {
     width: 120px;
     border-radius: 10px;
+    display: block;
+    filter: drop-shadow(0 8px 30px rgba(0,0,0,0.6));
   }
-
+  
+  /* Golden Frame Animation */
   .logo-container::before {
     content: "";
     position: absolute;
-    top: -6px;
-    left: -6px;
-    right: -6px;
-    bottom: -6px;
-    border: 3px solid #ffd700;
+    inset: -8px;
     border-radius: 14px;
-    box-shadow: 0 0 15px #ffd700, 0 0 30px #b8860b;
-    animation: glow 2s infinite alternate;
+    padding: 2px;
+    background: conic-gradient(from 60deg, rgba(255,215,0,0.12), rgba(255,183,0,0.18), rgba(255,215,0,0.12));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    animation: spin 4.5s linear infinite;
+    pointer-events: none;
+  }
+  
+  @keyframes spin {
+    to { transform: rotate(360deg); }
   }
 
-  @keyframes glow {
-    from { box-shadow: 0 0 8px #b8860b, 0 0 18px #ffd700; }
-    to { box-shadow: 0 0 20px #ffcc33, 0 0 40px #ffd700; }
+  .title-h {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 34px;
+    letter-spacing: 2px;
+    margin: 0;
+    color: transparent;
+    background: linear-gradient(90deg, var(--gold-primary), #ffe07a);
+    -webkit-background-clip: text;
+    background-clip: text;
+    text-shadow: 
+      0 1px 0 rgba(0,0,0,0.6),
+      0 6px 18px rgba(255,183,0,0.06),
+      0 0 18px rgba(255,215,0,0.06);
+    transform-style: preserve-3d;
+    perspective: 1000px;
+    animation: shineMove 5s linear infinite;
+  }
+  
+  @keyframes shineMove {
+    0% { filter: brightness(1); }
+    50% { filter: brightness(1.25) drop-shadow(0 10px 24px rgba(255,180,0,0.08)); }
+    100% { filter: brightness(1); }
   }
 
-  a {
-    display: inline-block;
-    text-decoration: none;
-    color: black;
-    background: linear-gradient(135deg, #ffd700, #b8860b);
-    padding: 8px 15px;
-    border-radius: 10px;
-    margin: 6px;
-    font-weight: 600;
-    font-size: 0.9em;
-    box-shadow: 0 0 8px #ffd700;
-    transition: all 0.3s ease;
+  /* Controls Right */
+  .controls-right {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  
+  /* Button Base Styles */
+  .btn-primary {
+    background: linear-gradient(180deg, rgba(255,200,0,1), rgba(188,119,0,1));
+    border: none;
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: 6px;
+    color: #000;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: var(--shadow-button);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  }
+  
+  .btn-primary[aria-pressed="true"] {
+    box-shadow: 0 10px 40px rgba(255,190,0,0.18);
+  }
+  
+  .btn-primary:active {
+    transform: translateY(1px);
+  }
+  
+  .music-icon {
+    font-size: 16px;
+    margin-right: 6px;
   }
 
-  a:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 15px #ffd700;
+  /* Navigation */
+  .nav {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    z-index: 10;
+  }
+  
+  .nav-btn {
+    background: linear-gradient(180deg, rgba(60,60,60,0.55), rgba(24,24,24,0.6));
+    border: 1px solid rgba(255,215,0,0.12);
+    color: var(--gold-primary);
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-weight: 700;
+    cursor: pointer;
+    backdrop-filter: blur(6px);
+    transition: all var(--transition-smooth);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+  }
+  
+  .nav-btn.active {
+    background: linear-gradient(90deg, rgba(255,215,0,0.12), rgba(255,183,0,0.06));
+    color: #000;
+    border-color: rgba(255,215,0,0.6);
+  }
+  
+  .nav-btn:hover {
+    transform: translateY(-4px);
   }
 
-  footer {
-    margin-top: 15px;
-    font-size: 0.75em;
-    color: #999;
-    z-index: 3;
+  /* Panels */
+  .panels {
+    width: 100%;
+    max-width: 1100px;
+    margin-top: var(--space-sm);
     position: relative;
+    min-height: 60vh;
+    z-index: 10;
+  }
+  
+  .panel {
+    position: absolute;
+    inset: 0;
+    padding: var(--space-lg);
+    background: transparent;
+    backdrop-filter: blur(0px);
+    transform-origin: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-slow);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 14px;
+    will-change: transform, opacity;
+  }
+  
+  .panel.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0) scale(1);
+    backdrop-filter: blur(2px);
+  }
+  
+  /* Panel transitions */
+  .panel.enter-right {
+    transform: translateX(24px) scale(.995);
+    filter: blur(4px);
+    opacity: 0;
+  }
+  
+  .panel.enter-left {
+    transform: translateX(-24px) scale(.995);
+    filter: blur(4px);
+    opacity: 0;
+  }
+
+  /* Card Base Styles */
+  .card-base {
+    width: 100%;
+    max-width: 760px;
+    padding: var(--space-md);
+    border-radius: 10px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+    border: 1px solid rgba(255,215,0,0.06);
+    box-shadow: var(--shadow-card);
+    color: var(--text-muted);
+    text-align: center;
+  }
+  
+  .card-base h3 {
+    color: var(--gold-primary);
+    margin: 0 0 var(--space-xs);
+    font-family: 'Cinzel Decorative', serif;
+  }
+  
+  .socials {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: var(--space-sm);
+  }
+  
+  .social-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: 10px 14px;
+    border-radius: 8px;
+    background: linear-gradient(90deg, rgba(255,215,0,0.15), rgba(255,183,0,0.06));
+    color: #000;
+    text-decoration: none;
+    font-weight: 800;
+    border: 1px solid rgba(0,0,0,0.2);
+    transition: transform var(--transition-fast);
+  }
+  
+  .social-link:hover {
+    transform: translateY(-2px);
+  }
+
+  /* Footer */
+  .footer {
+    margin-top: 26px;
+    color: rgba(255,255,255,0.18);
+    font-size: 13px;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 720px) {
+    .topbar {
+      padding: var(--space-xs) 6px;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    
+    .title-h {
+      font-size: 22px;
+    }
+    
+    .logo-container img {
+      width: 92px;
+    }
+    
+    .card-base {
+      padding: 14px;
+    }
+    
+    .controls-right {
+      width: 100%;
+      justify-content: center;
+    }
+    
+    .nav {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .app {
+      padding: var(--space-md) 12px 40px;
+    }
+    
+    .socials {
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .social-link {
+      width: 100%;
+      max-width: 200px;
+      justify-content: center;
+    }
   }
 </style>
 </head>
 <body>
 
+<!-- Skip Link for Accessibility -->
+<a href="#main-content" class="skip-link">Asosiy kontentga o'tish</a>
+
+<!-- LOADER -->
+<div id="loader" class="loader-wrap" aria-hidden="false">
+  <div class="loader">
+    <div class="logo-container">
+      <img class="logo" src="https://raw.githubusercontent.com/konimer/konimer.github.io/main/il_fullxfull.4822568259_hylg.jpg" alt="KONIMER" loading="lazy">
+    </div>
+    <h2>KONIMER PREMIUM</h2>
+    <small>Futuristic experience loading…</small>
+  </div>
+</div>
+
+<!-- PARTICLES CANVAS -->
 <canvas id="particles"></canvas>
 
-<div class="logo-container">
-  <img src="https://raw.githubusercontent.com/konimer/konimer.github.io/main/il_fullxfull.4822568259_hylg.jpg" alt="KONIMER logo" class="logo">
+<!-- APP -->
+<div class="app" role="main" aria-live="polite" id="main-content">
+  <header class="topbar" role="banner">
+    <div class="left-controls">
+      <div class="logo-container" aria-hidden="true">
+        <img src="https://raw.githubusercontent.com/konimer/konimer.github.io/main/il_fullxfull.4822568259_hylg.jpg" alt="KONIMER logo" loading="lazy">
+      </div>
+      <div>
+        <div class="title-h">KONIMER PREMIUM</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.18)">Futuristic • Gold • UX</div>
+      </div>
+    </div>
+
+    <div class="controls-right">
+      <button id="musicBtn" class="btn-primary" aria-pressed="false" title="Music on/off">
+        <span class="music-icon">🎵</span><span id="musicLabel">Musiqa</span>
+      </button>
+      <nav class="nav" role="navigation" aria-label="Primary">
+        <button data-target="about" class="nav-btn" id="navAbout" aria-controls="about" aria-expanded="true">Biz haqimizda</button>
+        <button data-target="contact" class="nav-btn" id="navContact" aria-controls="contact" aria-expanded="false">Aloqa</button>
+      </nav>
+    </div>
+  </header>
+
+  <section class="panels" aria-live="polite">
+    <!-- ABOUT -->
+    <article id="about" class="panel active" role="region" aria-labelledby="aboutTitle">
+      <div class="card-base">
+        <h3 id="aboutTitle">Biz haqimizda</h3>
+        <p style="color:var(--text-muted);line-height:1.5">
+          KONIMER — brendi bilan  premium tajriba yaratamiz: vizual, animatsiya va hissiyot uyg'unligi.
+        </p>
+        <div class="socials">
+          <a class="social-link" href="https://t.me/konimer" target="_blank" rel="noopener noreferrer">🔗 Telegram</a>
+          <a class="social-link" href="https://t.me/+VmvgNbHFGWs4Y2Yy" target="_blank" rel="noopener noreferrer">🔗 Telegram (guruh)</a>
+          <a class="social-link" href="https://www.instagram.com/ru.raximboyev" target="_blank" rel="noopener noreferrer">📷 Instagram</a>
+          <a class="social-link" href="https://www.tiktok.com/@umid_totsamiy" target="_blank" rel="noopener noreferrer">🎵 TikTok</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- CONTACT -->
+    <article id="contact" class="panel" role="region" aria-labelledby="contactTitle">
+      <div class="card-base">
+        <h3 id="contactTitle">Aloqa</h3>
+        <p style="color:var(--text-muted);line-height:1.5">Bog'lanish uchun:</p>
+        <p style="color:var(--text-muted);font-weight:700">📞 <a href="tel:+998947370714" style="color:var(--gold-primary);text-decoration:none">+998 94 737 0714</a></p>
+        <p style="color:var(--text-muted)">📍 <a href="https://maps.app.goo.gl/Xw6qCGbRChdDnebp9" target="_blank" style="color:var(--gold-primary)">Manzilni ko'rish</a></p>
+        <p style="color:var(--text-muted);margin-top:var(--space-xs)">💳 To'lovlar va boshqa ma'lumotlar: sahifalar orqali.</p>
+      </div>
+    </article>
+  </section>
+
+  <div class="footer">© 2025 KONIMER PREMIUM | Raximboyev Umidjon</div>
 </div>
 
-<h1>KONIMER PREMIUM</h1>
-
-<nav>
-  <button onclick="showPage('home')">Asosiy</button>
-  <button onclick="showPage('about')">Biz haqimizda</button>
-  <button onclick="showPage('contact')">Bog‘lanish</button>
-</nav>
-
-<!-- Sahifalar -->
-<div id="home" class="page active">
-  <a href="https://t.me/+VmvgNbHFGWs4Y2Yy" target="_blank">Telegram</a>
-  <a href="https://www.instagram.com/ru.raximboyev" target="_blank">Instagram</a>
-  <a href="https://www.tiktok.com/@umid_totsamiy" target="_blank">TikTok</a>
-</div>
-
-<div id="about" class="page">
-  <p>KONIMER PREMIUM — bu zamonaviy va sifatli loyihalar platformasi. Biz innovatsiya, dizayn va ishonchlilikni uyg‘unlashtiramiz.</p>
-</div>
-
-<div id="contact" class="page">
-  <a href="tel:+998947370714">📞 Qo‘ng‘iroq qilish</a>
-  <a href="https://maps.app.goo.gl/Xw6qCGbRChdDnebp9" target="_blank">📍 Manzilni ko‘rish</a>
-  <p>💳 To‘lovlar tez kunda yo‘lga qo‘yiladi...</p>
-</div>
-
-<footer>© 2025 KONIMER PREMIUM | Raximboyev Umidjon</footer>
+<!-- Audio -->
+<audio id="bgAudio" src="music.mp3" loop preload="none"></audio>
 
 <script>
-function showPage(pageId) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById(pageId).classList.add('active');
-}
+// Optimized JavaScript Code
 
-// Zarrachalar
-const canvas = document.getElementById("particles");
-const ctx = canvas.getContext("2d");
-let particlesArray;
+// DOM Elements Cache
+const elements = {
+  loader: document.getElementById('loader'),
+  audio: document.getElementById('bgAudio'),
+  musicBtn: document.getElementById('musicBtn'),
+  musicLabel: document.getElementById('musicLabel'),
+  panels: document.querySelectorAll('.panel'),
+  navButtons: document.querySelectorAll('.nav-btn'),
+  canvas: document.getElementById('particles')
+};
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+// State Management
+const state = {
+  musicOn: false,
+  currentPanel: 'about',
+  particles: []
+};
 
-window.addEventListener("resize", function() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-  init();
+// Loader Logic
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    elements.loader.style.opacity = '0';
+    elements.loader.style.visibility = 'hidden';
+  }, 900);
 });
 
-class Particle {
-  constructor(x, y, size, speedX, speedY) {
-    this.x = x;
-    this.y = y;
-    this.size = size;
-    this.speedX = speedX;
-    this.speedY = speedY;
-  }
-  update() {
-    this.x += this.speedX;
-    this.y += this.speedY;
-    if (this.x > canvas.width || this.x < 0) this.speedX *= -1;
-    if (this.y > canvas.height || this.y < 0) this.speedY *= -1;
-  }
-  draw() {
-    ctx.fillStyle = "rgba(255, 215, 0, 0.8)";
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-    ctx.fill();
-  }
-}
-
-function init() {
-  particlesArray = [];
-  const numParticles = 60;
-  for (let i = 0; i < numParticles; i++) {
-    const size = Math.random() * 3 + 1;
-    const x = Math.random() * canvas.width;
-    const y = Math.random() * canvas.height;
-    const speedX = (Math.random() - 0.5) * 1.2;
-    const speedY = (Math.random() - 0.5) * 1.2;
-    particlesArray.push(new Particle(x, y, size, speedX, speedY));
-  }
-}
-
-function animate() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  particlesArray.forEach(p => {
-    p.update();
-    p.draw();
+// Navigation System
+function showPanel(targetId) {
+  const targetPanel = document.getElementById(targetId);
+  const activePanel = document.querySelector('.panel.active');
+  
+  if (!targetPanel || targetPanel === activePanel) return;
+  
+  // Update state
+  state.currentPanel = targetId;
+  
+  // Determine direction
+  const panelsArray = Array.from(elements.panels);
+  const direction = panelsArray.indexOf(targetPanel) > panelsArray.indexOf(activePanel) ? 'right' : 'left';
+  
+  // Add directional class
+  targetPanel.classList.add(`enter-${direction}`);
+  
+  // Update ARIA attributes
+  elements.navButtons.forEach(btn => {
+    const expanded = btn.dataset.target === targetId;
+    btn.setAttribute('aria-expanded', expanded);
+    btn.classList.toggle('active', expanded);
   });
-  requestAnimationFrame(animate);
+  
+  // Animate transition
+  requestAnimationFrame(() => {
+    elements.panels.forEach(panel => panel.classList.remove('active'));
+    targetPanel.classList.add('active');
+    targetPanel.classList.remove('enter-right', 'enter-left');
+  });
 }
 
-init();
-animate();
-</script>
+// Event Listeners for Navigation
+elements.navButtons.forEach(btn => {
+  btn.addEventListener('click', () => showPanel(btn.dataset.target));
+});
 
+// Audio Control System
+elements.musicBtn.addEventListener('click', async () => {
+  if (!state.musicOn) {
+    try {
+      await elements.audio.play();
+      state.musicOn = true;
+      elements.musicBtn.setAttribute('aria-pressed', 'true');
+      elements.musicLabel.textContent = 'Musiqa: ON';
+    } catch (error) {
+      console.warn('Audio play failed:', error);
+    }
+  } else {
+    elements.audio.pause();
+    state.musicOn = false;
+    elements.musicBtn.setAttribute('aria-pressed', 'false');
+    elements.musicLabel.textContent = 'Musiqa: OFF';
+  }
+});
+
+// Optimized Particle System
+class ParticleSystem {
+  constructor(canvas) {
+    this.canvas = canvas;
+    this.ctx = canvas.getContext('2d');
+    this.particles = [];
+    this.animationId = null;
+    this.init();
+  }
+  
+  init() {
+    this.resize();
+    this.createParticles();
+    this.startAnimation();
+    
+    // Debounced resize handler
+    window.addEventListener('resize', this.debounce(() => {
+      this.resize();
+      this.createParticles();
+    }, 250));
+  }
+  
+  resize() {
+    this.canvas.width = window.innerWidth;
+    this.canvas.height = window.innerHeight;
+  }
+  
+  createParticles() {
+    const numParticles = Math.round((this.canvas.width * this.canvas.height) / 12000);
+    this.particles = Array.from({ length: numParticles }, () => ({
+      x: Math.random() * this.canvas.width,
+      y: Math.random() * this.canvas.height,
+      r: Math.random() * 2.6 + 0.6,
+      vx: (Math.random() - 0.5) * 0.8,
+      vy: (Math.random() - 0.5) * 0.8,
+      t: Math.random() * 1000
+    }));
+  }
+  
+  draw() {
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    
+    this.particles.forEach(particle => {
+      this.updateParticle(particle);
+      this.drawParticle(particle);
+    });
+    
+    this.animationId = requestAnimationFrame(() => this.draw());
+  }
+  
+  updateParticle(p) {
+    p.x += p.vx;
+    p.y += p.vy;
+    p.t += 0.01;
+    
+    // Wrap around edges
+    if (p.x < -20) p.x = this.canvas.width + 20;
+    if (p.x > this.canvas.width + 20) p.x = -20;
+    if (p.y < -20) p.y = this.canvas.height + 20;
+    if (p.y > this.canvas.height + 20) p.y = -20;
+  }
+  
+  drawParticle(p) {
+    const size = p.r + Math.sin(p.t) * 0.8;
+    
+    // Glow effects
+    const glows = [
+      { radius: size * 3.6, color: 'rgba(255, 215, 0, 0.06)' },
+      { radius: size * 2.2, color: 'rgba(255, 200, 0, 0.12)' },
+      { radius: size, color: 'rgba(255, 215, 0, 0.95)' }
+    ];
+    
+    glows.forEach(glow => {
+      this.ctx.beginPath();
+      this.ctx.fillStyle = glow.color;
+      this.ctx.arc(p.x, p.y, glow.radius, 0, Math.PI * 2);
+      this.ctx.fill();
+    });
+  }
+  
+  startAnimation() {
+    if (!this.animationId) {
+      this.draw();
+    }
+  }
+  
+  stopAnimation() {
+    if (this.animationId) {
+      cancelAnimationFrame(this.animationId);
+      this.animationId = null;
+    }
+  }
+  
+  debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+      const later = () => {
+        clearTimeout(timeout);
+        func(...args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
+  }
+}
+
+// Initialize Particle System
+const particleSystem = new ParticleSystem(elements.canvas);
+
+// Keyboard Navigation
+document.addEventListener('keydown', (event) => {
+  if (event.key === '1') showPanel('about');
+  if (event.key === '2') showPanel('contact');
+});
+
+// Performance Optimization - Pause particles when not visible
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    particleSystem.stopAnimation();
+  } else {
+    particleSystem.startAnimation();
+  }
+});
+
+// Error Handling for Audio
+elements.audio.addEventListener('error', (e) => {
+  console.error('Audio loading error:', e);
+  elements.musicBtn.style.opacity = '0.5';
+  elements.musicBtn.disabled = true;
+  elements.musicLabel.textContent = 'Audio not available';
+});
+
+// Initialize default state
+document.getElementById('navAbout').classList.add('active');
+</script>
 </body>
-</html>
+</html> 
