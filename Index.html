@@ -112,6 +112,7 @@
     border-radius:16px;
     display:flex; align-items:center; justify-content:center;
     filter: drop-shadow(0 12px 38px rgba(0,0,0,0.6));
+    z-index: 2;
   }
   /* glow disk behind logo */
   .logo-frame::after{
@@ -122,7 +123,10 @@
     filter: blur(10px);
     pointer-events:none;
   }
-  .logo-img{width:84px;height:84px;border-radius:12px;object-fit:cover;transform:perspective(800px) rotateX(6deg);}
+  .logo-img{
+    width:84px;height:84px;border-radius:12px;object-fit:cover;
+    transform:perspective(800px) rotateX(6deg);
+  }
 
   .title-block{display:flex;flex-direction:column;gap:4px;}
   .title-main{font-family:'Cinzel Decorative', serif;font-size:24px; letter-spacing:1px; line-height:1; 
@@ -243,6 +247,90 @@
   canvas#particles { position: fixed; inset:0; z-index:1; pointer-events:none; display:block; }
 
   /* -------------------------
+     LOGO BACKGROUND ANIMATION
+     ------------------------- */
+  .logo-background {
+    position: fixed;
+    top: 28px;
+    left: 18px;
+    width: 120px;
+    height: 120px;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .logo-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(12px);
+    opacity: 0.7;
+    animation: orbFloat 8s ease-in-out infinite;
+  }
+
+  .orb-1 {
+    width: 80px;
+    height: 80px;
+    background: radial-gradient(circle, rgba(255,215,0,0.4), rgba(255,183,0,0.2) 40%, transparent 70%);
+    top: 10px;
+    left: 10px;
+    animation-delay: 0s;
+  }
+
+  .orb-2 {
+    width: 60px;
+    height: 60px;
+    background: radial-gradient(circle, rgba(255,183,0,0.3), rgba(255,215,0,0.15) 40%, transparent 70%);
+    top: 30px;
+    left: 30px;
+    animation-delay: 2s;
+  }
+
+  .orb-3 {
+    width: 40px;
+    height: 40px;
+    background: radial-gradient(circle, rgba(255,215,0,0.25), rgba(255,200,0,0.1) 40%, transparent 70%);
+    top: 50px;
+    left: 20px;
+    animation-delay: 4s;
+  }
+
+  .logo-ring {
+    position: absolute;
+    border: 2px solid rgba(255,215,0,0.2);
+    border-radius: 50%;
+    animation: ringRotate 15s linear infinite;
+  }
+
+  .ring-1 {
+    width: 100px;
+    height: 100px;
+    top: 10px;
+    left: 10px;
+    animation-delay: 0s;
+  }
+
+  .ring-2 {
+    width: 70px;
+    height: 70px;
+    top: 25px;
+    left: 25px;
+    animation-delay: 1s;
+    animation-direction: reverse;
+  }
+
+  @keyframes orbFloat {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    25% { transform: translate(5px, -5px) scale(1.1); }
+    50% { transform: translate(-3px, 3px) scale(0.9); }
+    75% { transform: translate(-5px, -3px) scale(1.05); }
+  }
+
+  @keyframes ringRotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  /* -------------------------
      RESPONSIVE (mobile-first tweaks)
      ------------------------- */
   @media (max-width:820px){
@@ -251,6 +339,12 @@
     .loader-logo{width:96px;height:96px}
     .card{padding:18px;border-radius:14px}
     .link-btn{width:92%}
+    .logo-background { width: 100px; height: 100px; }
+    .orb-1 { width: 70px; height: 70px; }
+    .orb-2 { width: 50px; height: 50px; }
+    .orb-3 { width: 30px; height: 30px; }
+    .ring-1 { width: 80px; height: 80px; }
+    .ring-2 { width: 60px; height: 60px; }
   }
   @media (max-width:480px){
     .container{padding:12px}
@@ -260,9 +354,14 @@
     .link-btn{height:50px;font-size:15px}
     .logo-img{transform:perspective(700px) rotateX(4deg) scale(.96)}
     .card h2{font-size:18px}
+    .logo-background { width: 90px; height: 90px; top: 12px; left: 12px; }
+    .orb-1 { width: 60px; height: 60px; }
+    .orb-2 { width: 40px; height: 40px; }
+    .orb-3 { width: 25px; height: 25px; }
+    .ring-1 { width: 70px; height: 70px; }
+    .ring-2 { width: 50px; height: 50px; }
   }
 
-  /* misc small animations */
   @keyframes shineMove{0%{left:-40%}50%{left:80%}100%{left:120%}}
 </style>
 </head>
@@ -272,85 +371,65 @@
   <div id="loader" aria-hidden="false">
     <div class="loader-inner">
       <div class="loader-logo" role="img" aria-label="KONIMER logo">
-        <!-- Logo placeholder yoki alternativ logo -->
-        <div style="width:88px; height:88px; background:linear-gradient(135deg, var(--gold-1), var(--gold-2)); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:32px; color:#000;">K</div>
+        <img src="il_fullxfull.4822568259_hylg.jpg" alt="KONIMER logo" class="loader-img">
       </div>
       <div class="loader-title">KONIMER PREMIUM</div>
     </div>
   </div>
 
+  <!-- LOGO BACKGROUND ANIMATION -->
+  <div class="logo-background">
+    <div class="logo-orb orb-1"></div>
+    <div class="logo-orb orb-2"></div>
+    <div class="logo-orb orb-3"></div>
+    <div class="logo-ring ring-1"></div>
+    <div class="logo-ring ring-2"></div>
+  </div>
+
   <!-- PARTICLES CANVAS -->
   <canvas id="particles"></canvas>
 
-  <!-- PAGE CONTENT -->
-  <main class="page" role="main" aria-live="polite">
-    <div class="container" role="region" aria-label="KONIMER content">
-
-      <!-- TOP BAR -->
-      <div class="topbar" role="banner">
+  <div class="page">
+    <div class="container">
+      <!-- TOPBAR -->
+      <div class="topbar">
         <div class="left-wrap">
-          <div class="logo-frame" aria-hidden="true">
-            <!-- Logo placeholder yoki alternativ logo -->
-            <div class="logo-img" style="background:linear-gradient(135deg, var(--gold-1), var(--gold-2)); display:flex; align-items:center; justify-content:center; font-size:24px; color:#000; font-weight:bold;">K</div>
+          <div class="logo-frame">
+            <img src="il_fullxfull.4822568259_hylg.jpg" alt="Logo" class="logo-img">
           </div>
-
           <div class="title-block">
             <div class="title-main">KONIMER PREMIUM</div>
-            <div class="subtitle">Raximboyev • Gold • UZ</div>
+            <div class="subtitle">Futuristic dizayn & texnologiya</div>
           </div>
         </div>
-
-        <div class="music-wrap" role="group" aria-label="Music controls">
-          <button id="musicBtn" class="off" aria-pressed="false" aria-label="Musiqa boshqaruvi">
-            <span style="font-size:18px">🎵</span>
-            <span id="musicLabel" style="font-weight:800; margin-left:4px;">Musiqa</span>
-          </button>
+        <div class="music-wrap">
+          <button id="musicBtn" aria-pressed="false" class="off">🎵</button>
+          <div id="musicLabel">Musiqa: Oʻchiq</div>
         </div>
       </div>
 
-      <!-- PANEL -->
-      <section class="panel" aria-labelledby="about-title">
-        <div class="card" role="article" aria-labelledby="about-title">
-          <h2 id="about-title">BIZ HAQIMIZDA</h2>
-          <p>
-            KONIMER — brendi bilan premium tajriba yaratamiz: vizual, animatsiya va hissiyot uyg'unligi.
-          </p>
-
-          <!-- glow dots (positioned via JS for subtle scattered look) -->
-          <div class="dot" id="dotA" style="left:18%; top:12%;"></div>
-          <div class="dot" id="dotB" style="left:78%; top:22%;"></div>
-          <div class="dot" id="dotC" style="left:10%; top:66%;"></div>
-
-          <!-- Buttons group -->
-          <div class="links" role="list">
-            <a class="link-btn" role="listitem" href="https://t.me/konimer" target="_blank" rel="noopener noreferrer">
-              <span class="icon">🔗</span> Telegram
-            </a>
-            <a class="link-btn" role="listitem" href="https://t.me/+VmvgNbHFGWs4Y2Yy" target="_blank" rel="noopener noreferrer">
-              <span class="icon">👥</span> Telegram (guruh)
-            </a>
-            <a class="link-btn" role="listitem" href="https://www.instagram.com/ru.raximboyev" target="_blank" rel="noopener noreferrer">
-              <span class="icon">📷</span> Instagram
-            </a>
-            <a class="link-btn" role="listitem" href="https://www.tiktok.com/@umid_totsamiy" target="_blank" rel="noopener noreferrer">
-              <span class="icon">🎵</span> TikTok
-            </a>
+      <!-- MAIN CARD -->
+      <div class="panel">
+        <div class="card">
+          <h2>Biz haqimizda</h2>
+          <p>Konimer Premium — futuristik dizayn va texnologiya studiyasi. Eng so‘nggi texnologiyalar va noyob dizayn uslublarini birlashtirib, sizga noyob tajriba taqdim etamiz.</p>
+          <div class="links">
+            <button class="link-btn"><span class="icon">🔗</span> Saytimizga o‘ting</button>
+            <button class="link-btn"><span class="icon">📸</span> Instagram</button>
+            <button class="link-btn"><span class="icon">💬</span> Telegram</button>
           </div>
-
+          <!-- decorative dots -->
+          <div id="dotA" class="dot"></div>
+          <div id="dotB" class="dot"></div>
+          <div id="dotC" class="dot"></div>
         </div>
-      </section>
+      </div>
 
-      <div class="footer">© 2025 KONIMER PREMIUM | Raximboyev Umidjon</div>
+      <div class="footer">© 2025 KONIMER PREMIUM</div>
     </div>
-  </main>
+  </div>
 
-  <!-- LOCAL AUDIO (place music.mp3 next to index.html) -->
-  <audio id="bgAudio" loop>
-    <!-- Agar musiqa fayli mavjud bo'lmasa, bu qism ishlamaydi -->
-    <source src="music.mp3" type="audio/mpeg">
-    <source src="music.ogg" type="audio/ogg">
-    Sizning brauzeringiz audio elementini qo'llab-quvvatlamaydi.
-  </audio>
+  <audio id="bgAudio" loop src="your-audio-file.mp3"></audio>
 
 <script>
 /* ===============================================
@@ -374,8 +453,7 @@
   function recreate(){
     particles = [];
     const area = w*h;
-    // particle count scales with screen but limited for mobile perf
-    const target = Math.max(18, Math.min(160, Math.round(area / 9000)));
+    const target = Math.max(18, Math.min(120, Math.round(area / 9000)));
     for(let i=0;i<target;i++){
       particles.push({
         x: Math.random()*w,
@@ -392,16 +470,11 @@
 
   function draw(){
     ctx.clearRect(0,0,w,h);
-    // subtle vignette overlay
-    ctx.fillStyle = 'rgba(0,0,0,0.06)';
-    // ctx.fillRect(0,0,w,h);
-
     particles.forEach(p=>{
-      // update
       p.x += p.vx;
       p.y += p.vy;
       p.t += 0.01;
-      // attraction to pointer
+
       if(pointer.active){
         const dx = pointer.x - p.x;
         const dy = pointer.y - p.y;
@@ -411,15 +484,12 @@
         }
       }
 
-      // wrap
       if(p.x < -40) p.x = w + 40;
       if(p.x > w + 40) p.x = -40;
       if(p.y < -40) p.y = h + 40;
       if(p.y > h + 40) p.y = -40;
 
       const size = p.r + Math.sin(p.t) * 0.8;
-
-      // glow layers
       drawGlow(p.x, p.y, size*3.6, 'rgba(255,215,0,' + (0.04*p.glow).toFixed(3) + ')');
       drawGlow(p.x, p.y, size*2.2, 'rgba(255,200,0,' + (0.08*p.glow).toFixed(3) + ')');
       drawGlow(p.x, p.y, size, 'rgba(255,215,0,' + (0.95*p.glow).toFixed(3) + ')');
@@ -435,7 +505,6 @@
   }
   draw();
 
-  // pointer interaction
   window.addEventListener('mousemove', (e)=>{ pointer.x=e.clientX; pointer.y=e.clientY; pointer.active=true; });
   window.addEventListener('touchstart', (e)=>{ if(e.touches && e.touches[0]){ pointer.x = e.touches[0].clientX; pointer.y = e.touches[0].clientY; pointer.active = true; } });
   window.addEventListener('touchmove', (e)=>{ if(e.touches && e.touches[0]){ pointer.x = e.touches[0].clientX; pointer.y = e.touches[0].clientY; } });
@@ -457,14 +526,18 @@
   const dotB = document.getElementById('dotB');
   const dotC = document.getElementById('dotC');
 
-  // hide loader after DOM ready (not waiting for audio)
-  window.addEventListener('DOMContentLoaded', ()=>{
-    setTimeout(()=>{ loader.classList.add('hidden'); document.querySelector('.container').style.opacity = 1; }, 800);
+  window.addEventListener('load', ()=>{
+    loader.classList.add('hidden');
+    loader.setAttribute('aria-hidden','true');
+    document.querySelector('.container').style.opacity = 1;
   });
 
-  // music toggle: user must click to start audio (browser policies)
   let playing = false;
+  let lastClick = 0;
   musicBtn.addEventListener('click', async ()=>{
+    const now = Date.now();
+    if(now - lastClick < 300) return;
+    lastClick = now;
     try{
       if(!playing){
         await audio.play();
@@ -483,17 +556,16 @@
       }
     }catch(err){
       console.warn('Audio play failed:', err);
-      // degrade gracefully
       musicLabel.textContent = 'Audio mavjud emas';
       musicBtn.style.opacity = 0.5;
       musicBtn.disabled = true;
     }
   });
 
-  // place decorative dots with slight motion
+  let bounds = card.getBoundingClientRect();
+  window.addEventListener('resize', ()=>{ bounds = card.getBoundingClientRect(); });
+
   function animateDots(){
-    const bounds = card.getBoundingClientRect();
-    // random slight movement using sin/t
     const t = performance.now() / 1000;
     function pos(el, fx, fy){
       const x = bounds.left + bounds.width * fx + Math.sin(t*1.2 + fx*10)*6;
@@ -508,26 +580,18 @@
   }
   animateDots();
 
-  // keyboard accessibility: M toggles music
   window.addEventListener('keydown',(e)=>{
     if(e.key.toLowerCase() === 'm'){ musicBtn.click(); }
   });
 
-  // If audio fails to load, disable button visually
   audio.addEventListener('error', ()=>{
     musicBtn.style.opacity = 0.5;
     musicBtn.disabled = true;
     musicLabel.textContent = 'Audio mavjud emas';
   });
 })();
-
-/* ===============================================
-   Small helper: ensure scrolling and nice appearance on mobile
-   =============================================== */
-(function(){
-  // remove overflow hidden on body to allow scrolling on mobile if content grows
-  document.addEventListener('DOMContentLoaded', ()=>{ document.body.style.overflowY = 'auto'; });
-})();
 </script>
+
 </body>
-</html>
+        </html>
+        
