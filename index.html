@@ -4,731 +4,522 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <meta name="description" content="KONIMER PREMIUM - Futuristic dizayn va texnologiya studiyasi" />
-<meta name="keywords" content="konimer, premium, dizayn, texnologiya, futuristic" />
 <title>KONIMER PREMIUM — Futuristic</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
+
+<!-- FONTS -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
+
 <style>
-  /* CSS Variables - Optimized */
-  :root {
-    /* Colors */
-    --bg-primary: #000;
-    --gold-primary: #ffd700;
-    --gold-secondary: #ffb300;
-    --text-muted: #bfbfbf;
-    --panel-bg: rgba(255,255,255,0.04);
-    
-    /* Spacing */
-    --space-xs: 8px;
-    --space-sm: 12px;
-    --space-md: 18px;
-    --space-lg: 28px;
-    --space-xl: 32px;
-    
-    /* Shadows */
-    --shadow-gold: 0 8px 40px rgba(255,183,0,0.08);
-    --shadow-card: 0 10px 30px rgba(0,0,0,0.6);
-    --shadow-button: 0 6px 22px rgba(255,180,0,0.08);
-    
-    /* Transitions */
-    --transition-fast: 0.18s ease;
-    --transition-smooth: 0.45s cubic-bezier(.2,.9,.2,1);
-    --transition-slow: 0.8s cubic-bezier(.2,.9,.2,1);
+  /* -------------------------
+     THEME VARIABLES
+     ------------------------- */
+  :root{
+    --bg:#000;
+    --gold-1:#ffd700;
+    --gold-2:#ffb300;
+    --muted:rgba(255,255,255,0.18);
+    --card-bg: rgba(10,10,10,0.6);
+    --glass: rgba(255,255,255,0.03);
+    --accent-c: rgba(0,255,255,0.06);
+    --max-width: 980px;
+    --radius-lg: 14px;
+    --radius-sm: 10px;
+    --btn-h: 54px;
   }
 
-  /* Reset and Base Styles */
-  * { 
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-  
-  html, body {
-    height: 100%;
-    background: var(--bg-primary);
-    font-family: Inter, system-ui, -apple-system, "Poppins", sans-serif;
-    color: var(--gold-primary);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  /* Skip Link for Accessibility */
-  .skip-link {
-    position: absolute;
-    top: -40px;
-    left: var(--space-sm);
-    background: var(--gold-primary);
-    color: #000;
-    padding: var(--space-xs);
-    text-decoration: none;
-    font-weight: 700;
-    border-radius: 4px;
-    z-index: 10000;
-    transition: top 0.3s;
-  }
-  
-  .skip-link:focus {
-    top: var(--space-sm);
+  /* -------------------------
+     GLOBAL RESET
+     ------------------------- */
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family:Inter, system-ui, -apple-system, "Poppins", sans-serif;
+    background:var(--bg);
+    color:var(--gold-1);
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
   }
 
-  /* Loader Styles */
-  .loader-wrap {
-    position: fixed;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(180deg, rgba(0,0,0,1), rgba(0,0,0,0.9));
-    z-index: 9999;
-    backdrop-filter: blur(2px);
-    transition: opacity var(--transition-slow), visibility var(--transition-slow);
+  a{color:inherit;text-decoration:none}
+
+  /* -------------------------
+     LOADER
+     ------------------------- */
+  #loader {
+    position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
+    z-index:9999; background: radial-gradient(circle at 50% 40%, rgba(0,0,0,0.9), #000 60%);
+    transition:opacity .6s ease, visibility .6s; 
   }
-  
-  .loader {
-    text-align: center;
-    transform: translateY(-10px);
-    will-change: transform;
+  #loader.hidden{opacity:0; visibility:hidden; pointer-events:none;}
+  .loader-inner{
+    text-align:center;
   }
-  
-  .loader .logo {
-    width: 140px;
-    border-radius: var(--space-sm);
-    box-shadow: var(--shadow-gold), inset 0 0 var(--space-sm) rgba(255,215,0,0.12);
-    animation: logoPulse 2.8s infinite ease-in-out;
-    border: 2px solid rgba(255,215,0,0.12);
+  .loader-logo{
+    width:110px; height:110px; border-radius:18px;
+    background:linear-gradient(180deg, rgba(255,215,0,0.06), rgba(255,215,0,0.02));
+    display:inline-flex; align-items:center; justify-content:center;
+    box-shadow: 0 10px 40px rgba(255,183,0,0.06), inset 0 0 28px rgba(255,215,0,0.02);
+    transform: translateY(-6px);
+    animation: loaderFloat 2.6s ease-in-out infinite;
+    border: 2px solid rgba(255,215,0,0.08);
   }
-  
-  @keyframes logoPulse {
-    0% { transform: scale(0.95) rotateX(0); }
-    50% { transform: scale(1.03) rotateX(6deg); }
-    100% { transform: scale(0.95) rotateX(0); }
+  .loader-logo img{width:88px; height:88px; object-fit:cover; border-radius:12px; display:block;}
+  .loader-title{
+    margin-top:10px; font-family:'Cinzel Decorative', serif; font-size:18px;
+    background: linear-gradient(90deg,var(--gold-1),var(--gold-2)); -webkit-background-clip:text; color:transparent;
+    letter-spacing:1px;
   }
-  
-  .loader h2 {
-    margin: var(--space-sm) 0 0;
-    font-family: 'Cinzel Decorative', serif;
-    font-size: 22px;
-    letter-spacing: 2px;
-    background: linear-gradient(90deg, var(--gold-primary), var(--gold-secondary));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+  @keyframes loaderFloat{0%{transform:translateY(-6px);}50%{transform:translateY(2px);}100%{transform:translateY(-6px);}}
+
+  /* -------------------------
+     LAYOUT
+     ------------------------- */
+  .page {
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+    padding:28px 18px 80px;
   }
-  
-  .loader small {
-    display: block;
-    color: var(--text-muted);
-    margin-top: var(--space-xs);
-    font-size: 13px;
+  .container{
+    width:100%;
+    max-width:var(--max-width);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:20px;
+    z-index:10; /* above particles */
   }
 
-  /* Main Layout */
-  .app {
-    position: relative;
-    min-height: 100vh;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    padding: var(--space-xl) 20px 60px;
-    z-index: 2;
+  /* -------------------------
+     TOPBAR (logo + title + music)
+     ------------------------- */
+  .topbar{
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+  }
+  .left-wrap{ display:flex; align-items:center; gap:14px; }
+  .logo-frame{
+    position:relative;
+    width:92px; height:92px;
+    border-radius:16px;
+    display:flex; align-items:center; justify-content:center;
+    filter: drop-shadow(0 12px 38px rgba(0,0,0,0.6));
+  }
+  /* glow disk behind logo */
+  .logo-frame::after{
+    content:"";
+    position:absolute; inset:-12px; border-radius:22px;
+    background: radial-gradient(circle at 30% 30%, rgba(255,215,0,0.12), rgba(255,183,0,0.06) 30%, rgba(0,0,0,0) 55%);
+    z-index:-1;
+    filter: blur(10px);
+    pointer-events:none;
+  }
+  .logo-img{width:84px;height:84px;border-radius:12px;object-fit:cover;transform:perspective(800px) rotateX(6deg);}
+
+  .title-block{display:flex;flex-direction:column;gap:4px;}
+  .title-main{font-family:'Cinzel Decorative', serif;font-size:24px; letter-spacing:1px; line-height:1; 
+    background: linear-gradient(90deg,var(--gold-1), #ffe07a); -webkit-background-clip:text; color:transparent;
+    text-shadow: 0 6px 16px rgba(255,183,0,0.04);
+  }
+  .subtitle{font-size:12px;color:var(--muted);}
+
+  /* MUSIC BUTTON (distinctive) - fixed top-right within container */
+  .music-wrap{ display:flex; align-items:center; gap:8px; }
+  #musicBtn {
+    display:inline-flex; align-items:center; gap:8px;
+    background: linear-gradient(180deg,var(--gold-1),var(--gold-2));
+    color:#000; font-weight:800;
+    padding:12px 14px; border-radius:12px;
+    box-shadow: 0 12px 40px rgba(255,183,0,0.14), inset 0 -6px 20px rgba(0,0,0,0.08);
+    border: none; cursor:pointer;
+    transform-origin:center; transition:all .22s cubic-bezier(.2,.9,.2,1);
+    position:relative;
+  }
+  #musicBtn:active{ transform: translateY(1px) scale(.997); }
+  #musicBtn.off{ background: linear-gradient(180deg, rgba(255,200,0,0.14), rgba(188,119,0,0.06)); color:var(--gold-1); box-shadow: 0 6px 20px rgba(0,0,0,0.5); }
+  /* small golden halo behind music button */
+  #musicBtn::before{
+    content:""; position:absolute; inset:-8px; border-radius:14px; z-index:-1;
+    background: radial-gradient(circle at 30% 30%, rgba(255,215,0,0.14), rgba(255,180,0,0.04) 30%, transparent 50%);
+    filter: blur(12px);
+    opacity: .95;
+    transition:opacity .3s;
   }
 
-  /* Particles Canvas */
-  canvas#particles {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 5;
-    pointer-events: none;
-    will-change: transform;
-  }
-
-  /* Topbar Styles */
-  .topbar {
-    width: 100%;
-    max-width: 1100px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-sm);
-    margin-bottom: var(--space-md);
-    z-index: 10;
-    position: relative;
-  }
-  
-  .left-controls {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-  }
-  
-  .logo-container {
-    position: relative;
-    display: inline-block;
-  }
-  
-  .logo-container img {
-    width: 120px;
-    border-radius: 10px;
-    display: block;
-    filter: drop-shadow(0 8px 30px rgba(0,0,0,0.6));
-  }
-  
-  /* Golden Frame Animation */
-  .logo-container::before {
-    content: "";
-    position: absolute;
-    inset: -8px;
-    border-radius: 14px;
-    padding: 2px;
-    background: conic-gradient(from 60deg, rgba(255,215,0,0.12), rgba(255,183,0,0.18), rgba(255,215,0,0.12));
-    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-    animation: spin 4.5s linear infinite;
-    pointer-events: none;
-  }
-  
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
-
-  .title-h {
-    font-family: 'Cinzel Decorative', serif;
-    font-size: 34px;
-    letter-spacing: 2px;
-    margin: 0;
-    color: transparent;
-    background: linear-gradient(90deg, var(--gold-primary), #ffe07a);
-    -webkit-background-clip: text;
-    background-clip: text;
-    text-shadow: 
-      0 1px 0 rgba(0,0,0,0.6),
-      0 6px 18px rgba(255,183,0,0.06),
-      0 0 18px rgba(255,215,0,0.06);
-    transform-style: preserve-3d;
-    perspective: 1000px;
-    animation: shineMove 5s linear infinite;
-  }
-  
-  @keyframes shineMove {
-    0% { filter: brightness(1); }
-    50% { filter: brightness(1.25) drop-shadow(0 10px 24px rgba(255,180,0,0.08)); }
-    100% { filter: brightness(1); }
-  }
-
-  /* Controls Right */
-  .controls-right {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-  }
-  
-  /* Button Base Styles */
-  .btn-primary {
-    background: linear-gradient(180deg, rgba(255,200,0,1), rgba(188,119,0,1));
-    border: none;
-    padding: var(--space-xs) var(--space-sm);
-    border-radius: 6px;
-    color: #000;
-    font-weight: 700;
-    cursor: pointer;
-    box-shadow: var(--shadow-button);
-    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
-  }
-  
-  .btn-primary[aria-pressed="true"] {
-    box-shadow: 0 10px 40px rgba(255,190,0,0.18);
-  }
-  
-  .btn-primary:active {
-    transform: translateY(1px);
-  }
-  
-  .music-icon {
-    font-size: 16px;
-    margin-right: 6px;
-  }
-
-  /* Navigation */
-  .nav {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    z-index: 10;
-  }
-  
-  .nav-btn {
-    background: linear-gradient(180deg, rgba(60,60,60,0.55), rgba(24,24,24,0.6));
-    border: 1px solid rgba(255,215,0,0.12);
-    color: var(--gold-primary);
-    padding: 10px 14px;
-    border-radius: 6px;
-    font-weight: 700;
-    cursor: pointer;
-    backdrop-filter: blur(6px);
-    transition: all var(--transition-smooth);
-    box-shadow: 0 6px 18px rgba(0,0,0,0.6);
-  }
-  
-  .nav-btn.active {
-    background: linear-gradient(90deg, rgba(255,215,0,0.12), rgba(255,183,0,0.06));
-    color: #000;
-    border-color: rgba(255,215,0,0.6);
-  }
-  
-  .nav-btn:hover {
-    transform: translateY(-4px);
-  }
-
-  /* Panels */
-  .panels {
-    width: 100%;
-    max-width: 1100px;
-    margin-top: var(--space-sm);
-    position: relative;
-    min-height: 60vh;
-    z-index: 10;
-  }
-  
+  /* -------------------------
+     PANEL (Biz haqimizda)
+     ------------------------- */
   .panel {
-    position: absolute;
-    inset: 0;
-    padding: var(--space-lg);
-    background: transparent;
-    backdrop-filter: blur(0px);
-    transform-origin: center;
-    opacity: 0;
-    visibility: hidden;
-    transition: all var(--transition-slow);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 14px;
-    will-change: transform, opacity;
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding-top:18px;
   }
-  
-  .panel.active {
-    opacity: 1;
-    visibility: visible;
-    transform: translateX(0) scale(1);
-    backdrop-filter: blur(2px);
-  }
-  
-  /* Panel transitions */
-  .panel.enter-right {
-    transform: translateX(24px) scale(.995);
-    filter: blur(4px);
-    opacity: 0;
-  }
-  
-  .panel.enter-left {
-    transform: translateX(-24px) scale(.995);
-    filter: blur(4px);
-    opacity: 0;
+  .card {
+    width:100%;
+    max-width:720px;
+    border-radius:18px;
+    padding:22px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border: 1px solid rgba(255,200,0,0.06);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+    color:var(--muted);
+    text-align:center;
+    position:relative;
+    overflow:hidden;
   }
 
-  /* Card Base Styles */
-  .card-base {
-    width: 100%;
-    max-width: 760px;
-    padding: var(--space-md);
-    border-radius: 10px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+  /* subtle animated shine stripe */
+  .card::before{
+    content:"";
+    position:absolute; left:-40%; top:0; width:40%; height:100%;
+    background: linear-gradient(120deg, rgba(255,255,255,0.0), rgba(255,255,255,0.03), rgba(255,255,255,0.0));
+    transform: skewX(-18deg);
+    animation: shineMove 6s linear infinite;
+    pointer-events:none;
+  }
+
+  .card h2{
+    margin:2px 0 8px; font-family:'Cinzel Decorative', serif;
+    color:var(--gold-1); font-size:22px; letter-spacing:1px;
+    text-shadow: 0 6px 16px rgba(255,183,0,0.04);
+  }
+  .card p{
+    color: #cfcfcf; line-height:1.6; margin:10px 0 18px; font-size:15px;
+  }
+
+  /* FUTURISTIC BUTTONS (stacked inside card) */
+  .links {
+    display:flex; flex-direction:column; gap:12px; align-items:center;
+    margin-top:6px;
+  }
+
+  .link-btn {
+    width:86%;
+    max-width:560px;
+    height: var(--btn-h);
+    border-radius:12px;
+    display:flex; align-items:center; gap:12px; justify-content:center;
+    padding:0 16px;
+    background: linear-gradient(90deg, rgba(255,215,0,0.12), rgba(255,183,0,0.04));
     border: 1px solid rgba(255,215,0,0.06);
-    box-shadow: var(--shadow-card);
-    color: var(--text-muted);
-    text-align: center;
+    color:#0b0b0b; font-weight:700; font-size:16px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.6), 0 8px 34px rgba(255,183,0,0.06);
+    position:relative; overflow:hidden; cursor:pointer; transition: all .28s ease;
   }
-  
-  .card-base h3 {
-    color: var(--gold-primary);
-    margin: 0 0 var(--space-xs);
-    font-family: 'Cinzel Decorative', serif;
+  .link-btn .icon {
+    background: rgba(0,0,0,0.04); padding:8px; border-radius:8px;
+    box-shadow: inset 0 -6px 12px rgba(0,0,0,0.15);
   }
-  
-  .socials {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-top: var(--space-sm);
+  .link-btn:hover{
+    transform: translateY(-6px) scale(1.01);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.7), 0 0 34px rgba(255,215,0,0.18);
   }
-  
-  .social-link {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-xs);
-    padding: 10px 14px;
-    border-radius: 8px;
-    background: linear-gradient(90deg, rgba(255,215,0,0.15), rgba(255,183,0,0.06));
-    color: #000;
-    text-decoration: none;
-    font-weight: 800;
-    border: 1px solid rgba(0,0,0,0.2);
-    transition: transform var(--transition-fast);
-  }
-  
-  .social-link:hover {
-    transform: translateY(-2px);
+  /* inner glow effect for btn */
+  .link-btn::after{
+    content:""; position:absolute; inset:0; border-radius:12px;
+    background: radial-gradient(circle at 10% 30%, rgba(255,215,0,0.06), transparent 25%);
+    mix-blend-mode: screen; pointer-events:none;
   }
 
-  /* Footer */
-  .footer {
-    margin-top: 26px;
-    color: rgba(255,255,255,0.18);
-    font-size: 13px;
+  /* tiny decorative golden dots floating in card */
+  .card .dot { position:absolute; width:10px;height:10px;border-radius:50%; background:rgba(255,200,0,0.8); filter:blur(6px); opacity:.9; }
+
+  /* footer */
+  .footer { margin-top:18px; color: rgba(255,255,255,0.12); font-size:13px; text-align:center; padding-top:12px; }
+
+  /* -------------------------
+     PARTICLES (canvas covers full page in background)
+     ------------------------- */
+  canvas#particles { position: fixed; inset:0; z-index:1; pointer-events:none; display:block; }
+
+  /* -------------------------
+     RESPONSIVE (mobile-first tweaks)
+     ------------------------- */
+  @media (max-width:820px){
+    .title-main{font-size:20px}
+    .logo-frame{width:84px;height:84px}
+    .loader-logo{width:96px;height:96px}
+    .card{padding:18px;border-radius:14px}
+    .link-btn{width:92%}
+  }
+  @media (max-width:480px){
+    .container{padding:12px}
+    .topbar{align-items:center; gap:10px; flex-direction:row}
+    .title-main{font-size:18px}
+    #musicBtn{padding:10px 12px; border-radius:10px}
+    .link-btn{height:50px;font-size:15px}
+    .logo-img{transform:perspective(700px) rotateX(4deg) scale(.96)}
+    .card h2{font-size:18px}
   }
 
-  /* Responsive Design */
-  @media (max-width: 720px) {
-    .topbar {
-      padding: var(--space-xs) 6px;
-      flex-direction: column;
-      gap: var(--space-md);
-    }
-    
-    .title-h {
-      font-size: 22px;
-    }
-    
-    .logo-container img {
-      width: 92px;
-    }
-    
-    .card-base {
-      padding: 14px;
-    }
-    
-    .controls-right {
-      width: 100%;
-      justify-content: center;
-    }
-    
-    .nav {
-      width: 100%;
-      justify-content: center;
-    }
-  }
-  
-  @media (max-width: 480px) {
-    .app {
-      padding: var(--space-md) 12px 40px;
-    }
-    
-    .socials {
-      flex-direction: column;
-      align-items: center;
-    }
-    
-    .social-link {
-      width: 100%;
-      max-width: 200px;
-      justify-content: center;
-    }
-  }
+  /* misc small animations */
+  @keyframes shineMove{0%{left:-40%}50%{left:80%}100%{left:120%}}
 </style>
 </head>
 <body>
 
-<!-- Skip Link for Accessibility -->
-<a href="#main-content" class="skip-link">Asosiy kontentga o'tish</a>
-
-<!-- LOADER -->
-<div id="loader" class="loader-wrap" aria-hidden="false">
-  <div class="loader">
-    <div class="logo-container">
-      <img class="logo" src="https://raw.githubusercontent.com/konimer/konimer.github.io/main/il_fullxfull.4822568259_hylg.jpg" alt="KONIMER" loading="lazy">
+  <!-- LOADER -->
+  <div id="loader" aria-hidden="false">
+    <div class="loader-inner">
+      <div class="loader-logo" role="img" aria-label="KONIMER logo">
+        <!-- using raw githubusercontent path for the logo image -->
+        <img src="https://github.com/konimer/konimer.github.io/blob/main/il_fullxfull.4822568259_hylg.jpg" alt="KONIMER logo" class="loader-img">
+      </div>
+      <div class="loader-title">KONIMER PREMIUM</div>
     </div>
-    <h2>KONIMER PREMIUM</h2>
-    <small>Futuristic experience loading…</small>
   </div>
-</div>
 
-<!-- PARTICLES CANVAS -->
-<canvas id="particles"></canvas>
+  <!-- PARTICLES CANVAS -->
+  <canvas id="particles"></canvas>
 
-<!-- APP -->
-<div class="app" role="main" aria-live="polite" id="main-content">
-  <header class="topbar" role="banner">
-    <div class="left-controls">
-      <div class="logo-container" aria-hidden="true">
-        <img src="https://raw.githubusercontent.com/konimer/konimer.github.io/main/il_fullxfull.4822568259_hylg.jpg" alt="KONIMER logo" loading="lazy">
-      </div>
-      <div>
-        <div class="title-h">KONIMER PREMIUM</div>
-        <div style="font-size:12px;color:rgba(255,255,255,0.18)">Futuristic • Gold • UX</div>
-      </div>
-    </div>
+  <!-- PAGE CONTENT -->
+  <main class="page" role="main" aria-live="polite">
+    <div class="container" role="region" aria-label="KONIMER content">
 
-    <div class="controls-right">
-      <button id="musicBtn" class="btn-primary" aria-pressed="false" title="Music on/off">
-        <span class="music-icon">🎵</span><span id="musicLabel">Musiqa</span>
-      </button>
-      <nav class="nav" role="navigation" aria-label="Primary">
-        <button data-target="about" class="nav-btn" id="navAbout" aria-controls="about" aria-expanded="true">Biz haqimizda</button>
-        <button data-target="contact" class="nav-btn" id="navContact" aria-controls="contact" aria-expanded="false">Aloqa</button>
-      </nav>
-    </div>
-  </header>
+      <!-- TOP BAR -->
+      <div class="topbar" role="banner">
+        <div class="left-wrap">
+          <div class="logo-frame" aria-hidden="true">
+            <img class="logo-img" src="https://github.com/konimer/konimer.github.io/blob/main/il_fullxfull.4822568259_hylg.jpg" alt="KONIMER logo">
+          </div>
 
-  <section class="panels" aria-live="polite">
-    <!-- ABOUT -->
-    <article id="about" class="panel active" role="region" aria-labelledby="aboutTitle">
-      <div class="card-base">
-        <h3 id="aboutTitle">Biz haqimizda</h3>
-        <p style="color:var(--text-muted);line-height:1.5">
-          KONIMER — brendi bilan  premium tajriba yaratamiz: vizual, animatsiya va hissiyot uyg'unligi.
-        </p>
-        <div class="socials">
-          <a class="social-link" href="https://t.me/konimer" target="_blank" rel="noopener noreferrer">🔗 Telegram</a>
-          <a class="social-link" href="https://t.me/+VmvgNbHFGWs4Y2Yy" target="_blank" rel="noopener noreferrer">🔗 Telegram (guruh)</a>
-          <a class="social-link" href="https://www.instagram.com/ru.raximboyev" target="_blank" rel="noopener noreferrer">📷 Instagram</a>
-          <a class="social-link" href="https://www.tiktok.com/@umid_totsamiy" target="_blank" rel="noopener noreferrer">🎵 TikTok</a>
+          <div class="title-block">
+            <div class="title-main">KONIMER PREMIUM</div>
+            <div class="subtitle">Futuristic • Gold • UX</div>
+          </div>
+        </div>
+
+        <div class="music-wrap" role="group" aria-label="Music controls">
+          <button id="musicBtn" class="off" aria-pressed="false" aria-label="Musiqa boshqaruvi">
+            <span style="font-size:18px">🎵</span>
+            <span id="musicLabel" style="font-weight:800; margin-left:4px;">Musiqa</span>
+          </button>
         </div>
       </div>
-    </article>
 
-    <!-- CONTACT -->
-    <article id="contact" class="panel" role="region" aria-labelledby="contactTitle">
-      <div class="card-base">
-        <h3 id="contactTitle">Aloqa</h3>
-        <p style="color:var(--text-muted);line-height:1.5">Bog'lanish uchun:</p>
-        <p style="color:var(--text-muted);font-weight:700">📞 <a href="tel:+998947370714" style="color:var(--gold-primary);text-decoration:none">+998 94 737 0714</a></p>
-        <p style="color:var(--text-muted)">📍 <a href="https://maps.app.goo.gl/Xw6qCGbRChdDnebp9" target="_blank" style="color:var(--gold-primary)">Manzilni ko'rish</a></p>
-        <p style="color:var(--text-muted);margin-top:var(--space-xs)">💳 To'lovlar va boshqa ma'lumotlar: sahifalar orqali.</p>
-      </div>
-    </article>
-  </section>
+      <!-- PANEL -->
+      <section class="panel" aria-labelledby="about-title">
+        <div class="card" role="article" aria-labelledby="about-title">
+          <h2 id="about-title">BIZ HAQIMIZDA</h2>
+          <p>
+            KONIMER — brendi bilan premium tajriba yaratamiz: vizual, animatsiya va hissiyot uyg'unligi.
+          </p>
 
-  <div class="footer">© 2025 KONIMER PREMIUM | Raximboyev Umidjon</div>
-</div>
+          <!-- glow dots (positioned via JS for subtle scattered look) -->
+          <div class="dot" id="dotA" style="left:18%; top:12%;"></div>
+          <div class="dot" id="dotB" style="left:78%; top:22%;"></div>
+          <div class="dot" id="dotC" style="left:10%; top:66%;"></div>
 
-<!-- Audio -->
-<audio id="bgAudio" src="music.mp3" loop preload="none"></audio>
+          <!-- Buttons group -->
+          <div class="links" role="list">
+            <a class="link-btn" role="listitem" href="https://t.me/konimer" target="_blank" rel="noopener noreferrer">
+              <span class="icon">🔗</span> Telegram
+            </a>
+            <a class="link-btn" role="listitem" href="https://t.me/+VmvgNbHFGWs4Y2Yy" target="_blank" rel="noopener noreferrer">
+              <span class="icon">👥</span> Telegram (guruh)
+            </a>
+            <a class="link-btn" role="listitem" href="https://www.instagram.com/ru.raximboyev" target="_blank" rel="noopener noreferrer">
+              <span class="icon">📷</span> Instagram
+            </a>
+            <a class="link-btn" role="listitem" href="https://www.tiktok.com/@umid_totsamiy" target="_blank" rel="noopener noreferrer">
+              <span class="icon">🎵</span> TikTok
+            </a>
+          </div>
+
+        </div>
+      </section>
+
+      <div class="footer">© 2025 KONIMER PREMIUM | Raximboyev Umidjon</div>
+    </div>
+  </main>
+
+  <!-- LOCAL AUDIO (place music.mp3 next to index.html) -->
+  <audio id="bgAudio" src="music.mp3" preload="none" crossorigin="anonymous"></audio>
 
 <script>
-// Optimized JavaScript Code
+/* ===============================================
+   PARTICLES + BACKGROUND INTERACTION
+   =============================================== */
+(function(){
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+  let w = canvas.width = window.innerWidth;
+  let h = canvas.height = window.innerHeight;
+  let particles = [];
+  let pointer = { x: w/2, y: h/2, active:false };
 
-// DOM Elements Cache
-const elements = {
-  loader: document.getElementById('loader'),
-  audio: document.getElementById('bgAudio'),
-  musicBtn: document.getElementById('musicBtn'),
-  musicLabel: document.getElementById('musicLabel'),
-  panels: document.querySelectorAll('.panel'),
-  navButtons: document.querySelectorAll('.nav-btn'),
-  canvas: document.getElementById('particles')
-};
+  function resize(){
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+    recreate();
+  }
+  window.addEventListener('resize', debounce(resize, 180));
 
-// State Management
-const state = {
-  musicOn: false,
-  currentPanel: 'about',
-  particles: []
-};
-
-// Loader Logic
-window.addEventListener('load', () => {
-  setTimeout(() => {
-    elements.loader.style.opacity = '0';
-    elements.loader.style.visibility = 'hidden';
-  }, 900);
-});
-
-// Navigation System
-function showPanel(targetId) {
-  const targetPanel = document.getElementById(targetId);
-  const activePanel = document.querySelector('.panel.active');
-  
-  if (!targetPanel || targetPanel === activePanel) return;
-  
-  // Update state
-  state.currentPanel = targetId;
-  
-  // Determine direction
-  const panelsArray = Array.from(elements.panels);
-  const direction = panelsArray.indexOf(targetPanel) > panelsArray.indexOf(activePanel) ? 'right' : 'left';
-  
-  // Add directional class
-  targetPanel.classList.add(`enter-${direction}`);
-  
-  // Update ARIA attributes
-  elements.navButtons.forEach(btn => {
-    const expanded = btn.dataset.target === targetId;
-    btn.setAttribute('aria-expanded', expanded);
-    btn.classList.toggle('active', expanded);
-  });
-  
-  // Animate transition
-  requestAnimationFrame(() => {
-    elements.panels.forEach(panel => panel.classList.remove('active'));
-    targetPanel.classList.add('active');
-    targetPanel.classList.remove('enter-right', 'enter-left');
-  });
-}
-
-// Event Listeners for Navigation
-elements.navButtons.forEach(btn => {
-  btn.addEventListener('click', () => showPanel(btn.dataset.target));
-});
-
-// Audio Control System
-elements.musicBtn.addEventListener('click', async () => {
-  if (!state.musicOn) {
-    try {
-      await elements.audio.play();
-      state.musicOn = true;
-      elements.musicBtn.setAttribute('aria-pressed', 'true');
-      elements.musicLabel.textContent = 'Musiqa: ON';
-    } catch (error) {
-      console.warn('Audio play failed:', error);
+  function recreate(){
+    particles = [];
+    const area = w*h;
+    // particle count scales with screen but limited for mobile perf
+    const target = Math.max(18, Math.min(160, Math.round(area / 9000)));
+    for(let i=0;i<target;i++){
+      particles.push({
+        x: Math.random()*w,
+        y: Math.random()*h,
+        r: Math.random()*2.6 + 0.6,
+        vx: (Math.random()-0.5)*0.6,
+        vy: (Math.random()-0.5)*0.6,
+        t: Math.random()*Math.PI*2,
+        glow: Math.random()*0.8 + 0.3
+      });
     }
-  } else {
-    elements.audio.pause();
-    state.musicOn = false;
-    elements.musicBtn.setAttribute('aria-pressed', 'false');
-    elements.musicLabel.textContent = 'Musiqa: OFF';
   }
-});
+  recreate();
 
-// Optimized Particle System
-class ParticleSystem {
-  constructor(canvas) {
-    this.canvas = canvas;
-    this.ctx = canvas.getContext('2d');
-    this.particles = [];
-    this.animationId = null;
-    this.init();
-  }
-  
-  init() {
-    this.resize();
-    this.createParticles();
-    this.startAnimation();
-    
-    // Debounced resize handler
-    window.addEventListener('resize', this.debounce(() => {
-      this.resize();
-      this.createParticles();
-    }, 250));
-  }
-  
-  resize() {
-    this.canvas.width = window.innerWidth;
-    this.canvas.height = window.innerHeight;
-  }
-  
-  createParticles() {
-    const numParticles = Math.round((this.canvas.width * this.canvas.height) / 12000);
-    this.particles = Array.from({ length: numParticles }, () => ({
-      x: Math.random() * this.canvas.width,
-      y: Math.random() * this.canvas.height,
-      r: Math.random() * 2.6 + 0.6,
-      vx: (Math.random() - 0.5) * 0.8,
-      vy: (Math.random() - 0.5) * 0.8,
-      t: Math.random() * 1000
-    }));
-  }
-  
-  draw() {
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    
-    this.particles.forEach(particle => {
-      this.updateParticle(particle);
-      this.drawParticle(particle);
+  function draw(){
+    ctx.clearRect(0,0,w,h);
+    // subtle vignette overlay
+    ctx.fillStyle = 'rgba(0,0,0,0.06)';
+    // ctx.fillRect(0,0,w,h);
+
+    particles.forEach(p=>{
+      // update
+      p.x += p.vx;
+      p.y += p.vy;
+      p.t += 0.01;
+      // attraction to pointer
+      if(pointer.active){
+        const dx = pointer.x - p.x;
+        const dy = pointer.y - p.y;
+        const d = Math.sqrt(dx*dx + dy*dy);
+        if(d < 160){
+          p.x -= dx * 0.002; p.y -= dy * 0.002;
+        }
+      }
+
+      // wrap
+      if(p.x < -40) p.x = w + 40;
+      if(p.x > w + 40) p.x = -40;
+      if(p.y < -40) p.y = h + 40;
+      if(p.y > h + 40) p.y = -40;
+
+      const size = p.r + Math.sin(p.t) * 0.8;
+
+      // glow layers
+      drawGlow(p.x, p.y, size*3.6, 'rgba(255,215,0,' + (0.04*p.glow).toFixed(3) + ')');
+      drawGlow(p.x, p.y, size*2.2, 'rgba(255,200,0,' + (0.08*p.glow).toFixed(3) + ')');
+      drawGlow(p.x, p.y, size, 'rgba(255,215,0,' + (0.95*p.glow).toFixed(3) + ')');
     });
-    
-    this.animationId = requestAnimationFrame(() => this.draw());
+
+    requestAnimationFrame(draw);
   }
-  
-  updateParticle(p) {
-    p.x += p.vx;
-    p.y += p.vy;
-    p.t += 0.01;
-    
-    // Wrap around edges
-    if (p.x < -20) p.x = this.canvas.width + 20;
-    if (p.x > this.canvas.width + 20) p.x = -20;
-    if (p.y < -20) p.y = this.canvas.height + 20;
-    if (p.y > this.canvas.height + 20) p.y = -20;
+  function drawGlow(x,y,r, color){
+    ctx.beginPath();
+    ctx.fillStyle = color;
+    ctx.arc(x,y,r,0,Math.PI*2);
+    ctx.fill();
   }
-  
-  drawParticle(p) {
-    const size = p.r + Math.sin(p.t) * 0.8;
-    
-    // Glow effects
-    const glows = [
-      { radius: size * 3.6, color: 'rgba(255, 215, 0, 0.06)' },
-      { radius: size * 2.2, color: 'rgba(255, 200, 0, 0.12)' },
-      { radius: size, color: 'rgba(255, 215, 0, 0.95)' }
-    ];
-    
-    glows.forEach(glow => {
-      this.ctx.beginPath();
-      this.ctx.fillStyle = glow.color;
-      this.ctx.arc(p.x, p.y, glow.radius, 0, Math.PI * 2);
-      this.ctx.fill();
-    });
-  }
-  
-  startAnimation() {
-    if (!this.animationId) {
-      this.draw();
+  draw();
+
+  // pointer interaction
+  window.addEventListener('mousemove', (e)=>{ pointer.x=e.clientX; pointer.y=e.clientY; pointer.active=true; });
+  window.addEventListener('touchstart', (e)=>{ if(e.touches && e.touches[0]){ pointer.x = e.touches[0].clientX; pointer.y = e.touches[0].clientY; pointer.active = true; } });
+  window.addEventListener('touchmove', (e)=>{ if(e.touches && e.touches[0]){ pointer.x = e.touches[0].clientX; pointer.y = e.touches[0].clientY; } });
+  window.addEventListener('mouseleave', ()=>{ pointer.active=false; });
+
+  function debounce(fn, t){ let id; return function(){ clearTimeout(id); id=setTimeout(fn,t); } }
+})();
+
+/* ===============================================
+   UI: loader hide, music control and small dots pos
+   =============================================== */
+(function(){
+  const loader = document.getElementById('loader');
+  const audio = document.getElementById('bgAudio');
+  const musicBtn = document.getElementById('musicBtn');
+  const musicLabel = document.getElementById('musicLabel');
+  const card = document.querySelector('.card');
+  const dotA = document.getElementById('dotA');
+  const dotB = document.getElementById('dotB');
+  const dotC = document.getElementById('dotC');
+
+  // hide loader after DOM ready (not waiting for audio)
+  window.addEventListener('DOMContentLoaded', ()=>{
+    setTimeout(()=>{ loader.classList.add('hidden'); document.querySelector('.container').style.opacity = 1; }, 800);
+  });
+
+  // music toggle: user must click to start audio (browser policies)
+  let playing = false;
+  musicBtn.addEventListener('click', async ()=>{
+    try{
+      if(!playing){
+        await audio.play();
+        playing = true;
+        musicBtn.classList.remove('off');
+        musicBtn.setAttribute('aria-pressed','true');
+        musicLabel.textContent = 'Musiqa: ON';
+        musicBtn.style.transform = 'scale(1.02)';
+        setTimeout(()=>musicBtn.style.transform = '', 230);
+      } else {
+        audio.pause();
+        playing = false;
+        musicBtn.classList.add('off');
+        musicBtn.setAttribute('aria-pressed','false');
+        musicLabel.textContent = 'Musiqa: OFF';
+      }
+    }catch(err){
+      console.warn('Audio play failed:', err);
+      // degrade gracefully
+      musicLabel.textContent = 'Audio error';
     }
-  }
-  
-  stopAnimation() {
-    if (this.animationId) {
-      cancelAnimationFrame(this.animationId);
-      this.animationId = null;
+  });
+
+  // place decorative dots with slight motion
+  function animateDots(){
+    const bounds = card.getBoundingClientRect();
+    // random slight movement using sin/t
+    const t = performance.now() / 1000;
+    function pos(el, fx, fy){
+      const x = bounds.left + bounds.width * fx + Math.sin(t*1.2 + fx*10)*6;
+      const y = bounds.top + bounds.height * fy + Math.cos(t*0.8 + fy*8)*6;
+      el.style.left = (x - 5) + 'px';
+      el.style.top  = (y - 5) + 'px';
     }
+    pos(dotA, 0.12, 0.08);
+    pos(dotB, 0.78, 0.18);
+    pos(dotC, 0.10, 0.66);
+    requestAnimationFrame(animateDots);
   }
-  
-  debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-      const later = () => {
-        clearTimeout(timeout);
-        func(...args);
-      };
-      clearTimeout(timeout);
-      timeout = setTimeout(later, wait);
-    };
-  }
-}
+  animateDots();
 
-// Initialize Particle System
-const particleSystem = new ParticleSystem(elements.canvas);
+  // keyboard accessibility: M toggles music
+  window.addEventListener('keydown',(e)=>{
+    if(e.key.toLowerCase() === 'm'){ musicBtn.click(); }
+  });
 
-// Keyboard Navigation
-document.addEventListener('keydown', (event) => {
-  if (event.key === '1') showPanel('about');
-  if (event.key === '2') showPanel('contact');
-});
+  // If audio fails to load, disable button visually
+  audio.addEventListener('error', ()=>{
+    musicBtn.style.opacity = 0.5;
+    musicBtn.disabled = true;
+    musicLabel.textContent = 'Audio mavjud emas';
+  });
+})();
 
-// Performance Optimization - Pause particles when not visible
-document.addEventListener('visibilitychange', () => {
-  if (document.hidden) {
-    particleSystem.stopAnimation();
-  } else {
-    particleSystem.startAnimation();
-  }
-});
-
-// Error Handling for Audio
-elements.audio.addEventListener('error', (e) => {
-  console.error('Audio loading error:', e);
-  elements.musicBtn.style.opacity = '0.5';
-  elements.musicBtn.disabled = true;
-  elements.musicLabel.textContent = 'Audio not available';
-});
-
-// Initialize default state
-document.getElementById('navAbout').classList.add('active');
+/* ===============================================
+   Small helper: ensure scrolling and nice appearance on mobile
+   =============================================== */
+(function(){
+  // remove overflow hidden on body to allow scrolling on mobile if content grows
+  document.addEventListener('DOMContentLoaded', ()=>{ document.body.style.overflowY = 'auto'; });
+})();
 </script>
 </body>
-</html> 
+</html>
