@@ -272,8 +272,8 @@
   <div id="loader" aria-hidden="false">
     <div class="loader-inner">
       <div class="loader-logo" role="img" aria-label="KONIMER logo">
-        <!-- using raw githubusercontent path for the logo image -->
-        <img src="https://github.com/konimer/konimer.github.io/blob/main/il_fullxfull.4822568259_hylg.jpg" alt="KONIMER logo" class="loader-img">
+        <!-- Logo placeholder yoki alternativ logo -->
+        <div style="width:88px; height:88px; background:linear-gradient(135deg, var(--gold-1), var(--gold-2)); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:32px; color:#000;">K</div>
       </div>
       <div class="loader-title">KONIMER PREMIUM</div>
     </div>
@@ -290,7 +290,8 @@
       <div class="topbar" role="banner">
         <div class="left-wrap">
           <div class="logo-frame" aria-hidden="true">
-            <img class="logo-img" src="https://github.com/konimer/konimer.github.io/blob/main/il_fullxfull.4822568259_hylg.jpg" alt="KONIMER logo">
+            <!-- Logo placeholder yoki alternativ logo -->
+            <div class="logo-img" style="background:linear-gradient(135deg, var(--gold-1), var(--gold-2)); display:flex; align-items:center; justify-content:center; font-size:24px; color:#000; font-weight:bold;">K</div>
           </div>
 
           <div class="title-block">
@@ -344,7 +345,12 @@
   </main>
 
   <!-- LOCAL AUDIO (place music.mp3 next to index.html) -->
-  <audio id="bgAudio" src="music.mp3" preload="none" crossorigin="anonymous"></audio>
+  <audio id="bgAudio" loop>
+    <!-- Agar musiqa fayli mavjud bo'lmasa, bu qism ishlamaydi -->
+    <source src="music.mp3" type="audio/mpeg">
+    <source src="music.ogg" type="audio/ogg">
+    Sizning brauzeringiz audio elementini qo'llab-quvvatlamaydi.
+  </audio>
 
 <script>
 /* ===============================================
@@ -478,7 +484,9 @@
     }catch(err){
       console.warn('Audio play failed:', err);
       // degrade gracefully
-      musicLabel.textContent = 'Audio error';
+      musicLabel.textContent = 'Audio mavjud emas';
+      musicBtn.style.opacity = 0.5;
+      musicBtn.disabled = true;
     }
   });
 
