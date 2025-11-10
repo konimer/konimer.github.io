@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>KONIMER PREMIUM</title>
 <style>
+/* BODY va umumiy sozlamalar */
 body {
   margin: 0;
   background: #000;
@@ -12,18 +13,19 @@ body {
   font-family: 'Inter', sans-serif;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
   min-height: 100vh;
-  overflow: hidden;
 }
 
+/* Container: markazlashtirilgan va o‘rta qismni egallash */
 .container {
-  position: relative;
+  flex: 1; /* qolgan bo‘sh joyni egallash */
   text-align: center;
   padding: 20px;
+  max-width: 95%;
+  margin: 0 auto;
 }
 
+/* Canvas va waveform container */
 .waveform-container {
   position: relative;
   width: 300px;
@@ -41,6 +43,7 @@ body {
   z-index: 1;
 }
 
+/* Profil rasm va tugma */
 .profile-wrapper {
   position: absolute;
   top: 50%;
@@ -79,6 +82,7 @@ body {
   outline: none;
 }
 
+/* Sarlavha va paragraflar */
 h1 {
   margin-top: 20px;
   font-size: 24px;
@@ -91,6 +95,7 @@ p {
   line-height: 1.5;
 }
 
+/* Tugmalar */
 .btn {
   display: block;
   background: #baff3d;
@@ -111,12 +116,18 @@ p {
   transform: scale(1.05);
 }
 
+/* Footer */
 footer {
-  margin-top: 40px;
   color: #666;
-  font-size: 13px;
+  font-size: clamp(10px, 1.2vw, 13px); /* responsive font */
+  text-align: center;
+  padding: 10px 20px;
+  width: 100%;
+  box-sizing: border-box;
+  flex-shrink: 0;
 }
 
+/* Canvas */
 canvas {
   display: block;
 }
@@ -127,7 +138,7 @@ canvas {
   <div class="waveform-container">
     <canvas id="audioCanvas" class="waveform" width="300" height="300"></canvas>
     <div class="profile-wrapper">
-      <img src="https://github.com/konimer/konimer.github.io/raw/main/retouch_2025050922553313.jpg" 
+      <img src="https://github.com/konimer/konimer.github.io/raw/main/retouch_2025050922553313.jpg"  
            class="profile" alt="KONIMER" id="profile">
       <button class="play-btn" id="playBtn">▶</button>
     </div>
@@ -141,9 +152,9 @@ canvas {
   <a href="tel:+998947370714" class="btn">+998 94 737 07 14</a>
   <a href="https://t.me/konimer" class="btn" target="_blank">Telegram</a>
   <a href="https://t.me/+VmvgNbHFGWs4Y2Yy" class="btn" target="_blank">Telegram guruh</a>
-
-  <footer>©2025 KONIMER PREMIUM | RAXIMBOYEV UMIDJON</footer>
 </div>
+
+<footer>©2025 KONIMER PREMIUM | RAXIMBOYEV UMIDJON</footer>
 
 <!-- Audio element -->
 <audio id="bgAudio" loop>
@@ -152,6 +163,7 @@ canvas {
 </audio>
 
 <script>
+// JS: Audio + Dynamic Halo & Particles
 const audio = document.getElementById("bgAudio");
 const canvas = document.getElementById("audioCanvas");
 const ctx = canvas.getContext("2d");
@@ -162,111 +174,132 @@ let audioCtx, analyser, source;
 let bufferLength, dataArray;
 let started = false;
 let playing = false;
+let particles = [];
 let rotation = 0;
 
-// Canvasni tozalash va sozlash
+// Particle sinfi
+class Particle {
+    constructor(x, y, color) {
+        this.x = x;
+        this.y = y;
+        this.size = Math.random() * 4 + 2;
+        this.speedX = (Math.random() - 0.5) * 2;
+        this.speedY = (Math.random() - 0.5) * 2;
+        this.color = color;
+        this.alpha = 1;
+    }
+    update(level) {
+        this.x += this.speedX * level * 5;
+        this.y += this.speedY * level * 5;
+        this.alpha -= 0.02;
+    }
+    draw() {
+        ctx.globalAlpha = this.alpha;
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI*2);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+    }
+}
+
 function setupCanvas() {
-  canvas.width = 300;
-  canvas.height = 300;
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+    canvas.width = 300;
+    canvas.height = 300;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
 }
 
-// Waveform chizish
-function draw() {
-  requestAnimationFrame(draw);
-  
-  if (!analyser) return;
-  
-  analyser.getByteFrequencyData(dataArray);
-  
-  // Canvasni tozalash
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  
-  // Aylanishni yangilash
-  rotation += 0.01;
-  
-  const centerX = canvas.width / 2;
-  const centerY = canvas.height / 2;
-  const baseRadius = 110; // Rasm atrofidagi asosiy radius
-  const maxBarHeight = 40; // Maksimal bar balandligi
-  
-  // Har bir bar uchun
-  for(let i = 0; i < bufferLength; i++) {
-    // Bar burchagini hisoblash (aylanish bilan)
-    const angle = (i / bufferLength) * Math.PI * 2 + rotation;
-    
-    // Bar balandligi
-    const barHeight = (dataArray[i] / 255) * maxBarHeight;
-    
-    // Bar boshlang'ich va tugash nuqtalari
-    const startX = centerX + Math.cos(angle) * baseRadius;
-    const startY = centerY + Math.sin(angle) * baseRadius;
-    const endX = centerX + Math.cos(angle) * (baseRadius + barHeight);
-    const endY = centerY + Math.sin(angle) * (baseRadius + barHeight);
-    
-    // Bar chizish
-    ctx.strokeStyle = `hsl(${i * 360 / bufferLength}, 100%, 60%)`;
-    ctx.lineWidth = 2;
+// Ranglarni aniqlash
+function getDynamicColor(dataArray) {
+    const bass = dataArray.slice(0, Math.floor(bufferLength/3)).reduce((a,b)=>a+b,0)/ (bufferLength/3);
+    const mid = dataArray.slice(Math.floor(bufferLength/3), Math.floor(2*bufferLength/3)).reduce((a,b)=>a+b,0)/ (bufferLength/3);
+    const treble = dataArray.slice(Math.floor(2*bufferLength/3)).reduce((a,b)=>a+b,0)/ (bufferLength/3);
+    const hue = (bass + mid + treble) * 0.4;
+    const haloColor = `hsl(${hue % 360}, 100%, 60%)`;
+    const particleHue = (hue + 180) % 360;
+    const particleColor = `hsl(${particleHue}, 100%, 60%)`;
+    return {haloColor, particleColor};
+}
+
+// Animatsiya
+function drawParticlesAndHalo() {
+    requestAnimationFrame(drawParticlesAndHalo);
+    if(!analyser) return;
+    analyser.getByteFrequencyData(dataArray);
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    const centerX = canvas.width/2;
+    const centerY = canvas.height/2;
+
+    let sum = 0;
+    for(let i=0;i<bufferLength;i++) sum += dataArray[i];
+    let level = sum / bufferLength / 128;
+
+    const {haloColor, particleColor} = getDynamicColor(dataArray);
+
+    const baseRadius = 110;
+    const haloRadius = baseRadius + level*40;
+    rotation += 0.01;
+
+    ctx.save();
+    ctx.translate(centerX, centerY);
+    ctx.rotate(rotation);
+    const gradient = ctx.createRadialGradient(0,0,haloRadius-10,0,0,haloRadius);
+    gradient.addColorStop(0, haloColor.replace('60%','20%'));
+    gradient.addColorStop(1, haloColor.replace('60%','0%'));
+    ctx.fillStyle = gradient;
     ctx.beginPath();
-    ctx.moveTo(startX, startY);
-    ctx.lineTo(endX, endY);
-    ctx.stroke();
-  }
+    ctx.arc(0,0,haloRadius,0,Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+
+    const count = Math.floor(level*5);
+    for(let i=0;i<count;i++){
+        particles.push(new Particle(centerX, centerY, particleColor));
+    }
+
+    for(let i=particles.length-1;i>=0;i--){
+        const p=particles[i];
+        p.update(level);
+        p.draw();
+        if(p.alpha<=0) particles.splice(i,1);
+    }
 }
 
-// Audioni boshlash/to'xtatish
-async function toggleAudio() {
-  try {
-    if (!started) {
-      // Audio kontekstini yaratish
-      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      source = audioCtx.createMediaElementSource(audio);
-      analyser = audioCtx.createAnalyser();
-      
-      // Ulanishlar
-      source.connect(analyser);
-      analyser.connect(audioCtx.destination);
-      
-      // Analyser sozlamalari
-      analyser.fftSize = 256;
-      bufferLength = analyser.frequencyBinCount;
-      dataArray = new Uint8Array(bufferLength);
-      
-      // Canvasni sozlash
-      setupCanvas();
-      
-      // Chizishni boshlash
-      draw();
-      started = true;
+// Audio boshqaruvi
+async function toggleAudio(){
+    try{
+        if(!started){
+            audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+            source = audioCtx.createMediaElementSource(audio);
+            analyser = audioCtx.createAnalyser();
+            source.connect(analyser);
+            analyser.connect(audioCtx.destination);
+            analyser.fftSize = 256;
+            bufferLength = analyser.frequencyBinCount;
+            dataArray = new Uint8Array(bufferLength);
+            setupCanvas();
+            drawParticlesAndHalo();
+            started = true;
+        }
+        if(audioCtx.state==='suspended') await audioCtx.resume();
+        if(!playing){
+            await audio.play();
+            playBtn.textContent="⏸";
+            playing=true;
+        } else {
+            audio.pause();
+            playBtn.textContent="▶";
+            playing=false;
+        }
+    }catch(e){
+        console.error('Audio xatosi:', e);
+        alert('Audio fayl topilmadi yoki yuklashda xatolik yuz berdi.');
     }
-
-    // Audio kontekstini faollashtirish
-    if (audioCtx.state === 'suspended') {
-      await audioCtx.resume();
-    }
-
-    // Play/pause
-    if (!playing) {
-      await audio.play();
-      playBtn.textContent = "⏸";
-      playing = true;
-    } else {
-      audio.pause();
-      playBtn.textContent = "▶";
-      playing = false;
-    }
-  } catch (error) {
-    console.error('Audio xatosi:', error);
-    alert('Audio fayl topilmadi yoki yuklashda xatolik yuz berdi. Iltimos, music.mp3 faylini tekshiring.');
-  }
 }
 
-// Bosish hodisalari
-playBtn.addEventListener('click', toggleAudio);
-profile.addEventListener('click', toggleAudio);
-
-// Sahifa yuklanganda canvasni sozlash
-window.addEventListener('load', setupCanvas);
+playBtn.addEventListener('click',toggleAudio);
+profile.addEventListener('click',toggleAudio);
+window.addEventListener('load',setupCanvas);
 </script>
 </body>
 </html>
