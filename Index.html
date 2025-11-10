@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>KONIMER PREMIUM</title>
 <style>
-/* BODY va umumiy sozlamalar */
 body {
   margin: 0;
   background: #000;
@@ -16,16 +15,14 @@ body {
   min-height: 100vh;
 }
 
-/* Container: markazlashtirilgan va o‘rta qismni egallash */
 .container {
-  flex: 1; /* qolgan bo‘sh joyni egallash */
+  flex: 1;
   text-align: center;
   padding: 20px;
   max-width: 95%;
   margin: 0 auto;
 }
 
-/* Canvas va waveform container */
 .waveform-container {
   position: relative;
   width: 300px;
@@ -43,7 +40,6 @@ body {
   z-index: 1;
 }
 
-/* Profil rasm va tugma */
 .profile-wrapper {
   position: absolute;
   top: 50%;
@@ -82,7 +78,6 @@ body {
   outline: none;
 }
 
-/* Sarlavha va paragraflar */
 h1 {
   margin-top: 20px;
   font-size: 24px;
@@ -95,7 +90,6 @@ p {
   line-height: 1.5;
 }
 
-/* Tugmalar */
 .btn {
   display: block;
   background: #baff3d;
@@ -116,10 +110,9 @@ p {
   transform: scale(1.05);
 }
 
-/* Footer */
 footer {
   color: #666;
-  font-size: clamp(10px, 1.2vw, 13px); /* responsive font */
+  font-size: clamp(10px, 1.2vw, 13px);
   text-align: center;
   padding: 10px 20px;
   width: 100%;
@@ -127,7 +120,6 @@ footer {
   flex-shrink: 0;
 }
 
-/* Canvas */
 canvas {
   display: block;
 }
@@ -147,7 +139,6 @@ canvas {
   <h1>KONIMER PREMIUM</h1>
   <p>Bizning brend sizning biznesingiz uchun mukammal va zamonaviy saytlarni taklif qiladi.</p>
 
-  <!-- Tugmalar -->
   <a href="https://instagram.com/ru.raximboyev" class="btn" target="_blank">Instagram</a>
   <a href="tel:+998947370714" class="btn">+998 94 737 07 14</a>
   <a href="https://t.me/konimer" class="btn" target="_blank">Telegram</a>
@@ -156,150 +147,128 @@ canvas {
 
 <footer>©2025 KONIMER PREMIUM | RAXIMBOYEV UMIDJON</footer>
 
-<!-- Audio element -->
+<!-- Visitor counter -->
+<div id="visitorCounter" style="position:fixed; top:10px; right:10px; background:#baff3d; color:#000; padding:5px 10px; border-radius:8px; font-weight:bold; z-index:9999;">
+Loading...
+</div>
+
 <audio id="bgAudio" loop>
   <source src="music.mp3" type="audio/mpeg">
   Sizning brauzeringiz audio elementni qo'llab-quvvatlamaydi.
 </audio>
 
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
 <script>
-// JS: Audio + Dynamic Halo & Particles
+// Firebase config
+const firebaseConfig = {
+    apiKey: "SIZNING_API_KEY",
+    authDomain: "SIZNING_PROJECT_ID.firebaseapp.com",
+    databaseURL: "https://SIZNING_PROJECT_ID-default-rtdb.firebaseio.com",
+    projectId: "SIZNING_PROJECT_ID",
+    storageBucket: "SIZNING_PROJECT_ID.appspot.com",
+    messagingSenderId: "SIZNING_SENDER_ID",
+    appId: "SIZNING_APP_ID"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+// Visitor counter
+function incrementVisitor() {
+    const counterRef = db.ref('visitorCount');
+    counterRef.transaction(current => (current||0)+1, (err, committed, snapshot)=>{
+        if(committed) showCounter(snapshot.val());
+    });
+}
+
+function showCounter(count){
+    document.getElementById('visitorCounter').innerText = `Foydalanuvchilar: ${count}`;
+}
+
+// Audio + particles + halo
 const audio = document.getElementById("bgAudio");
 const canvas = document.getElementById("audioCanvas");
 const ctx = canvas.getContext("2d");
 const profile = document.getElementById("profile");
 const playBtn = document.getElementById("playBtn");
 
-let audioCtx, analyser, source;
-let bufferLength, dataArray;
-let started = false;
-let playing = false;
-let particles = [];
-let rotation = 0;
+let audioCtx, analyser, source, bufferLength, dataArray, started=false, playing=false, particles=[], rotation=0;
 
-// Particle sinfi
-class Particle {
-    constructor(x, y, color) {
-        this.x = x;
-        this.y = y;
-        this.size = Math.random() * 4 + 2;
-        this.speedX = (Math.random() - 0.5) * 2;
-        this.speedY = (Math.random() - 0.5) * 2;
-        this.color = color;
-        this.alpha = 1;
+class Particle{
+    constructor(x,y,color){
+        this.x=x; this.y=y;
+        this.size=Math.random()*4+2;
+        this.speedX=(Math.random()-0.5)*2;
+        this.speedY=(Math.random()-0.5)*2;
+        this.color=color;
+        this.alpha=1;
     }
-    update(level) {
-        this.x += this.speedX * level * 5;
-        this.y += this.speedY * level * 5;
-        this.alpha -= 0.02;
-    }
-    draw() {
-        ctx.globalAlpha = this.alpha;
-        ctx.fillStyle = this.color;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI*2);
-        ctx.fill();
-        ctx.globalAlpha = 1;
-    }
+    update(level){ this.x+=this.speedX*level*5; this.y+=this.speedY*level*5; this.alpha-=0.02; }
+    draw(){ ctx.globalAlpha=this.alpha; ctx.fillStyle=this.color; ctx.beginPath(); ctx.arc(this.x,this.y,this.size,0,Math.PI*2); ctx.fill(); ctx.globalAlpha=1;}
 }
 
-function setupCanvas() {
-    canvas.width = 300;
-    canvas.height = 300;
-    ctx.clearRect(0,0,canvas.width,canvas.height);
+function setupCanvas(){ canvas.width=300; canvas.height=300; ctx.clearRect(0,0,canvas.width,canvas.height); }
+
+function getDynamicColor(dataArray){
+    const bass=dataArray.slice(0,Math.floor(bufferLength/3)).reduce((a,b)=>a+b,0)/(bufferLength/3);
+    const mid=dataArray.slice(Math.floor(bufferLength/3),Math.floor(2*bufferLength/3)).reduce((a,b)=>a+b,0)/(bufferLength/3);
+    const treble=dataArray.slice(Math.floor(2*bufferLength/3)).reduce((a,b)=>a+b,0)/(bufferLength/3);
+    const hue=(bass+mid+treble)*0.4;
+    return {haloColor:`hsl(${hue%360},100%,60%)`, particleColor:`hsl(${(hue+180)%360},100%,60%)`};
 }
 
-// Ranglarni aniqlash
-function getDynamicColor(dataArray) {
-    const bass = dataArray.slice(0, Math.floor(bufferLength/3)).reduce((a,b)=>a+b,0)/ (bufferLength/3);
-    const mid = dataArray.slice(Math.floor(bufferLength/3), Math.floor(2*bufferLength/3)).reduce((a,b)=>a+b,0)/ (bufferLength/3);
-    const treble = dataArray.slice(Math.floor(2*bufferLength/3)).reduce((a,b)=>a+b,0)/ (bufferLength/3);
-    const hue = (bass + mid + treble) * 0.4;
-    const haloColor = `hsl(${hue % 360}, 100%, 60%)`;
-    const particleHue = (hue + 180) % 360;
-    const particleColor = `hsl(${particleHue}, 100%, 60%)`;
-    return {haloColor, particleColor};
-}
-
-// Animatsiya
-function drawParticlesAndHalo() {
+function drawParticlesAndHalo(){
     requestAnimationFrame(drawParticlesAndHalo);
     if(!analyser) return;
     analyser.getByteFrequencyData(dataArray);
     ctx.clearRect(0,0,canvas.width,canvas.height);
-    const centerX = canvas.width/2;
-    const centerY = canvas.height/2;
-
-    let sum = 0;
-    for(let i=0;i<bufferLength;i++) sum += dataArray[i];
-    let level = sum / bufferLength / 128;
-
-    const {haloColor, particleColor} = getDynamicColor(dataArray);
-
-    const baseRadius = 110;
-    const haloRadius = baseRadius + level*40;
-    rotation += 0.01;
-
+    const cx=canvas.width/2, cy=canvas.height/2;
+    let sum=0; for(let i=0;i<bufferLength;i++) sum+=dataArray[i];
+    const level=sum/bufferLength/128;
+    const {haloColor, particleColor}=getDynamicColor(dataArray);
+    const baseRadius=110;
+    const haloRadius=baseRadius+level*40;
+    rotation+=0.01;
     ctx.save();
-    ctx.translate(centerX, centerY);
+    ctx.translate(cx,cy);
     ctx.rotate(rotation);
-    const gradient = ctx.createRadialGradient(0,0,haloRadius-10,0,0,haloRadius);
-    gradient.addColorStop(0, haloColor.replace('60%','20%'));
-    gradient.addColorStop(1, haloColor.replace('60%','0%'));
-    ctx.fillStyle = gradient;
+    const gradient=ctx.createRadialGradient(0,0,haloRadius-10,0,0,haloRadius);
+    gradient.addColorStop(0,haloColor.replace('60%','20%'));
+    gradient.addColorStop(1,haloColor.replace('60%','0%'));
+    ctx.fillStyle=gradient;
     ctx.beginPath();
-    ctx.arc(0,0,haloRadius,0,Math.PI*2);
-    ctx.fill();
+    ctx.arc(0,0,haloRadius,0,Math.PI*2); ctx.fill();
     ctx.restore();
-
-    const count = Math.floor(level*5);
-    for(let i=0;i<count;i++){
-        particles.push(new Particle(centerX, centerY, particleColor));
-    }
-
-    for(let i=particles.length-1;i>=0;i--){
-        const p=particles[i];
-        p.update(level);
-        p.draw();
-        if(p.alpha<=0) particles.splice(i,1);
-    }
+    const count=Math.floor(level*5);
+    for(let i=0;i<count;i++) particles.push(new Particle(cx,cy,particleColor));
+    for(let i=particles.length-1;i>=0;i--){ const p=particles[i]; p.update(level); p.draw(); if(p.alpha<=0) particles.splice(i,1);}
 }
 
-// Audio boshqaruvi
 async function toggleAudio(){
-    try{
-        if(!started){
-            audioCtx = new (window.AudioContext||window.webkitAudioContext)();
-            source = audioCtx.createMediaElementSource(audio);
-            analyser = audioCtx.createAnalyser();
-            source.connect(analyser);
-            analyser.connect(audioCtx.destination);
-            analyser.fftSize = 256;
-            bufferLength = analyser.frequencyBinCount;
-            dataArray = new Uint8Array(bufferLength);
-            setupCanvas();
-            drawParticlesAndHalo();
-            started = true;
-        }
-        if(audioCtx.state==='suspended') await audioCtx.resume();
-        if(!playing){
-            await audio.play();
-            playBtn.textContent="⏸";
-            playing=true;
-        } else {
-            audio.pause();
-            playBtn.textContent="▶";
-            playing=false;
-        }
-    }catch(e){
-        console.error('Audio xatosi:', e);
-        alert('Audio fayl topilmadi yoki yuklashda xatolik yuz berdi.');
+    if(!started){
+        audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+        source=audioCtx.createMediaElementSource(audio);
+        analyser=audioCtx.createAnalyser();
+        source.connect(analyser); analyser.connect(audioCtx.destination);
+        analyser.fftSize=256;
+        bufferLength=analyser.frequencyBinCount;
+        dataArray=new Uint8Array(bufferLength);
+        setupCanvas(); drawParticlesAndHalo(); started=true;
     }
+    if(audioCtx.state==='suspended') await audioCtx.resume();
+    if(!playing){ await audio.play(); playBtn.textContent="⏸"; playing=true; }
+    else { audio.pause(); playBtn.textContent="▶"; playing=false; }
 }
 
 playBtn.addEventListener('click',toggleAudio);
 profile.addEventListener('click',toggleAudio);
-window.addEventListener('load',setupCanvas);
+window.addEventListener('load',()=>{
+    setupCanvas();
+    incrementVisitor();
+    db.ref('visitorCount').on('value',snap=>showCounter(snap.val()));
+});
 </script>
 </body>
 </html>
