@@ -31,14 +31,13 @@ body {
   width: 300px;
   height: 300px;
   border-radius: 50%;
-  overflow: hidden;
+  overflow: visible;
   z-index: 0;
 }
 
 canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
 }
 
@@ -59,8 +58,8 @@ canvas {
 
 .play-btn {
   position: absolute;
-  bottom: 5px;
-  right: 5px;
+  bottom: -10px;
+  right: -10px;
   background: #baff3d;
   border-radius: 50%;
   width: 40px;
@@ -149,6 +148,7 @@ const playBtn = document.getElementById("playBtn");
 let audioCtx, analyser, source;
 let bufferLength, dataArray;
 let started = false;
+let playing = false;
 
 function draw() {
   requestAnimationFrame(draw);
@@ -168,7 +168,7 @@ function draw() {
   }
 }
 
-async function startAudio() {
+async function toggleAudio() {
   if (!started) {
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     source = audioCtx.createMediaElementSource(audio);
@@ -183,12 +183,21 @@ async function startAudio() {
   }
 
   if(audioCtx.state === 'suspended') await audioCtx.resume();
-  audio.play().catch(e => console.log('Audio play error:', e));
+
+  if(!playing){
+    audio.play();
+    playBtn.textContent = "⏸";
+    playing = true;
+  } else {
+    audio.pause();
+    playBtn.textContent = "▶";
+    playing = false;
+  }
 }
 
 // Bosish mumkin: profil rasm yoki kichik tugma
-playBtn.addEventListener('click', startAudio);
-profile.addEventListener('click', startAudio);
+playBtn.addEventListener('click', toggleAudio);
+profile.addEventListener('click', toggleAudio);
 </script>
 </body>
 </html>
