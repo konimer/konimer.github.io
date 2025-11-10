@@ -21,29 +21,31 @@ body {
 .container {
   position: relative;
   text-align: center;
+  padding: 20px;
+}
+
+.waveform-container {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  margin: 0 auto 30px;
 }
 
 .waveform {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 300px;
-  height: 300px;
-  border-radius: 50%;
-  overflow: visible;
-  z-index: 0;
-}
-
-canvas {
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  pointer-events: none;
+  border-radius: 50%;
+  z-index: 1;
 }
 
 .profile-wrapper {
-  position: relative;
-  display: inline-block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   z-index: 2;
 }
 
@@ -54,6 +56,7 @@ canvas {
   object-fit: cover;
   border: 4px solid #baff3d;
   cursor: pointer;
+  display: block;
 }
 
 .play-btn {
@@ -72,6 +75,8 @@ canvas {
   cursor: pointer;
   z-index: 3;
   user-select: none;
+  border: none;
+  outline: none;
 }
 
 h1 {
@@ -82,6 +87,8 @@ h1 {
 p {
   color: #bbb;
   margin-bottom: 30px;
+  max-width: 500px;
+  line-height: 1.5;
 }
 
 .btn {
@@ -109,18 +116,21 @@ footer {
   color: #666;
   font-size: 13px;
 }
+
+canvas {
+  display: block;
+}
 </style>
 </head>
 <body>
 <div class="container">
-  <div class="waveform">
-    <canvas id="audioCanvas" width="300" height="300"></canvas>
-  </div>
-
-  <div class="profile-wrapper">
-    <img src="https://github.com/konimer/konimer.github.io/raw/main/retouch_2025050922553313.jpg" 
-         class="profile" alt="KONIMER" id="profile">
-    <div class="play-btn" id="playBtn">▶</div>
+  <div class="waveform-container">
+    <canvas id="audioCanvas" class="waveform" width="300" height="300"></canvas>
+    <div class="profile-wrapper">
+      <img src="https://github.com/konimer/konimer.github.io/raw/main/retouch_2025050922553313.jpg" 
+           class="profile" alt="KONIMER" id="profile">
+      <button class="play-btn" id="playBtn">▶</button>
+    </div>
   </div>
 
   <h1>KONIMER PREMIUM</h1>
@@ -135,8 +145,11 @@ footer {
   <footer>©2025 KONIMER PREMIUM | RAXIMBOYEV UMIDJON</footer>
 </div>
 
-<!-- Lokal audio fayl -->
-<audio id="bgAudio" src="music.mp3" loop></audio>
+<!-- Audio element -->
+<audio id="bgAudio" loop>
+  <source src="music.mp3" type="audio/mpeg">
+  Sizning brauzeringiz audio elementni qo'llab-quvvatlamaydi.
+</audio>
 
 <script>
 const audio = document.getElementById("bgAudio");
@@ -151,58 +164,109 @@ let started = false;
 let playing = false;
 let rotation = 0;
 
+// Canvasni tozalash va sozlash
+function setupCanvas() {
+  canvas.width = 300;
+  canvas.height = 300;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+// Waveform chizish
 function draw() {
   requestAnimationFrame(draw);
+  
+  if (!analyser) return;
+  
   analyser.getByteFrequencyData(dataArray);
+  
+  // Canvasni tozalash
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   
-  // Aylanish effekti
-  rotation += 0.005;
+  // Aylanishni yangilash
+  rotation += 0.01;
   
-  const cx = canvas.width/2, cy = canvas.height/2, r=100;
-  for(let i=0;i<bufferLength;i++){
-    const angle=(i/bufferLength)*2*Math.PI + rotation;
-    const h=dataArray[i]/4;
-    const x1=cx+Math.cos(angle)*r;
-    const y1=cy+Math.sin(angle)*r;
-    const x2=cx+Math.cos(angle)*(r+h);
-    const y2=cy+Math.sin(angle)*(r+h);
-    ctx.strokeStyle=`hsl(${i*2},100%,60%)`;
-    ctx.lineWidth=2;
-    ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+  const centerX = canvas.width / 2;
+  const centerY = canvas.height / 2;
+  const baseRadius = 110; // Rasm atrofidagi asosiy radius
+  const maxBarHeight = 40; // Maksimal bar balandligi
+  
+  // Har bir bar uchun
+  for(let i = 0; i < bufferLength; i++) {
+    // Bar burchagini hisoblash (aylanish bilan)
+    const angle = (i / bufferLength) * Math.PI * 2 + rotation;
+    
+    // Bar balandligi
+    const barHeight = (dataArray[i] / 255) * maxBarHeight;
+    
+    // Bar boshlang'ich va tugash nuqtalari
+    const startX = centerX + Math.cos(angle) * baseRadius;
+    const startY = centerY + Math.sin(angle) * baseRadius;
+    const endX = centerX + Math.cos(angle) * (baseRadius + barHeight);
+    const endY = centerY + Math.sin(angle) * (baseRadius + barHeight);
+    
+    // Bar chizish
+    ctx.strokeStyle = `hsl(${i * 360 / bufferLength}, 100%, 60%)`;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(startX, startY);
+    ctx.lineTo(endX, endY);
+    ctx.stroke();
   }
 }
 
+// Audioni boshlash/to'xtatish
 async function toggleAudio() {
-  if (!started) {
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    source = audioCtx.createMediaElementSource(audio);
-    analyser = audioCtx.createAnalyser();
-    source.connect(analyser);
-    analyser.connect(audioCtx.destination);
-    analyser.fftSize = 256;
-    bufferLength = analyser.frequencyBinCount;
-    dataArray = new Uint8Array(bufferLength);
-    draw();
-    started = true;
-  }
+  try {
+    if (!started) {
+      // Audio kontekstini yaratish
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      source = audioCtx.createMediaElementSource(audio);
+      analyser = audioCtx.createAnalyser();
+      
+      // Ulanishlar
+      source.connect(analyser);
+      analyser.connect(audioCtx.destination);
+      
+      // Analyser sozlamalari
+      analyser.fftSize = 256;
+      bufferLength = analyser.frequencyBinCount;
+      dataArray = new Uint8Array(bufferLength);
+      
+      // Canvasni sozlash
+      setupCanvas();
+      
+      // Chizishni boshlash
+      draw();
+      started = true;
+    }
 
-  if(audioCtx.state === 'suspended') await audioCtx.resume();
+    // Audio kontekstini faollashtirish
+    if (audioCtx.state === 'suspended') {
+      await audioCtx.resume();
+    }
 
-  if(!playing){
-    audio.play();
-    playBtn.textContent = "⏸";
-    playing = true;
-  } else {
-    audio.pause();
-    playBtn.textContent = "▶";
-    playing = false;
+    // Play/pause
+    if (!playing) {
+      await audio.play();
+      playBtn.textContent = "⏸";
+      playing = true;
+    } else {
+      audio.pause();
+      playBtn.textContent = "▶";
+      playing = false;
+    }
+  } catch (error) {
+    console.error('Audio xatosi:', error);
+    alert('Audio fayl topilmadi yoki yuklashda xatolik yuz berdi. Iltimos, music.mp3 faylini tekshiring.');
   }
 }
 
-// Bosish mumkin: profil rasm yoki kichik tugma
+// Bosish hodisalari
 playBtn.addEventListener('click', toggleAudio);
 profile.addEventListener('click', toggleAudio);
+
+// Sahifa yuklanganda canvasni sozlash
+window.addEventListener('load', setupCanvas);
 </script>
 </body>
 </html>
