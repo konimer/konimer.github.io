@@ -184,7 +184,7 @@ function incrementVisitor() {
   counterRef.transaction(current => (current || 0) + 1);
 }
 function showCounter(count) {
-  document.getElementById('visitorCounter').innerText = `Foydalanuvchi${count || 0} ta`;
+  document.getElementById('visitorCounter').innerText = `Foydalanuvchi: ${count || 0}`;
 }
 db.ref('visitorCount').on('value', snap => showCounter(snap.val()));
 window.addEventListener('load', incrementVisitor);
