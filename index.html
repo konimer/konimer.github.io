@@ -1,270 +1,451 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>KONIMER PREMIUM</title>
 <style>
-body {
-  margin: 0;
-  background: #000;
-  color: white;
-  font-family: 'Inter', sans-serif;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-.container {
-  flex: 1;
-  text-align: center;
-  padding: 20px;
-  max-width: 95%;
-  margin: 0 auto;
-}
-.waveform-container {
-  position: relative;
-  width: 300px;
-  height: 300px;
-  margin: 0 auto 30px;
-}
-.waveform {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  z-index: 1;
-}
-.profile-wrapper {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 2;
-}
-.profile {
-  border-radius: 50%;
-  width: 200px;
-  height: 200px;
-  object-fit: cover;
-  border: 4px solid #baff3d;
-  cursor: pointer;
-  display: block;
-}
-.play-btn {
-  position: absolute;
-  bottom: -10px;
-  right: -10px;
-  background: #baff3d;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  color: black;
-  cursor: pointer;
-  z-index: 3;
-  user-select: none;
-  border: none;
-  outline: none;
-}
-h1 {
-  margin-top: 20px;
-  font-size: 24px;
-}
-p {
-  color: #bbb;
-  margin-bottom: 30px;
-  max-width: 500px;
-  line-height: 1.5;
-}
-.btn {
-  display: block;
-  background: #baff3d;
-  color: black;
-  padding: 12px 30px;
-  border-radius: 30px;
-  margin: 10px auto;
-  font-weight: 600;
-  text-decoration: none;
-  width: 220px;
-  transition: 0.3s;
-  position: relative;
-  z-index: 5;
-}
-.btn:hover {
-  background: #d4ff6e;
-  transform: scale(1.05);
-}
-footer {
-  color: #666;
-  font-size: clamp(10px, 1.2vw, 13px);
-  text-align: center;
-  padding: 10px 20px;
-  width: 100%;
-  box-sizing: border-box;
-  flex-shrink: 0;
-}
-canvas { display: block; }
+  :root{
+    --gold-1: #b8860b; /* metallik base */
+    --gold-2: #ffcc33; /* highlight */
+    --bg: #000;
+  }
+  body{
+    margin:0;
+    background:var(--bg);
+    color:#fff;
+    font-family: 'Inter', sans-serif;
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+  }
+  .container{
+    flex:1;
+    text-align:center;
+    padding:20px;
+    max-width:95%;
+    margin:0 auto;
+  }
+  .waveform-container{
+    position:relative;
+    width:330px;
+    height:330px;
+    margin:0 auto 30px;
+  }
+  canvas {
+    position:absolute;
+    top:0; left:0;
+    width:100%;
+    height:100%;
+    border-radius:50%;
+    z-index:1;
+  }
+  .profile-wrapper{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    z-index:3;
+    pointer-events:none; /* allow clicking the play button over image */
+  }
+  .profile{
+    border-radius:50%;
+    width:220px;
+    height:220px;
+    object-fit:cover;
+    border:4px solid var(--gold-2);
+    display:block;
+    margin:0 auto;
+    pointer-events:auto;
+    background:#000;
+  }
+  .play-btn{
+    position:absolute;
+    right:-10px;
+    bottom:-10px;
+    background:var(--gold-2);
+    color:#000;
+    width:44px;
+    height:44px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:700;
+    cursor:pointer;
+    z-index:4;
+    border:none;
+  }
 
-/* 🔝 Hisoblagich o‘ng yuqorida */
-#visitorCounter {
-  position: fixed;
-  top: 10px;
-  right: 10px;
-  background: #baff3d;
-  color: #000;
-  padding: 6px 12px;
-  border-radius: 8px;
-  font-weight: bold;
-  z-index: 9999;
-  box-shadow: 0 0 10px #baff3d;
-  transition: transform 0.2s ease-in-out;
-}
-#visitorCounter:hover {
-  transform: scale(1.08);
-}
+  h1{ margin-top:20px; font-size:24px; }
+  p{ color:#bbb; margin-bottom:30px; max-width:600px; line-height:1.5; margin-left:auto; margin-right:auto; }
+
+  .btn{
+    display:block;
+    background:var(--gold-2);
+    color:black;
+    padding:12px 30px;
+    border-radius:30px;
+    margin:10px auto;
+    font-weight:600;
+    text-decoration:none;
+    width:220px;
+    transition:0.25s;
+    z-index:5;
+  }
+  .btn:hover{ transform:scale(1.05); background:#ffd84d; }
+
+  footer{
+    color:#666;
+    font-size:clamp(10px,1.2vw,13px);
+    text-align:center;
+    padding:10px 20px;
+    width:100%;
+    box-sizing:border-box;
+    flex-shrink:0;
+  }
+
+  /* visitor counter top-right */
+  #visitorCounter{
+    position:fixed;
+    top:12px;
+    right:12px;
+    background: rgba(0,0,0,0.45);
+    color: var(--gold-2);
+    padding:8px 14px;
+    border-radius:10px;
+    font-weight:600;
+    border:1px solid rgba(255,204,51,0.12);
+    box-shadow:0 0 14px rgba(255,204,51,0.06);
+    z-index:9999;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  #visitorCounter .pulse{
+    width:10px; height:10px; border-radius:50%;
+    background: linear-gradient(90deg,var(--gold-1),var(--gold-2));
+    box-shadow:0 0 8px rgba(255,204,51,0.6);
+    animation: ring 1.6s infinite;
+  }
+  @keyframes ring{
+    0%{ transform:scale(1); opacity:1; }
+    70%{ transform:scale(1.8); opacity:0.35; }
+    100%{ transform:scale(1); opacity:0.0; }
+  }
+
+  /* small screens */
+  @media (max-width:420px){
+    .waveform-container{ width:260px; height:260px; }
+    .profile{ width:180px; height:180px; }
+  }
 </style>
 </head>
 <body>
-<div class="container">
-  <div class="waveform-container">
-    <canvas id="audioCanvas" class="waveform" width="300" height="300"></canvas>
-    <div class="profile-wrapper">
-      <img src="https://github.com/konimer/konimer.github.io/raw/main/retouch_2025050922553313.jpg"  
-           class="profile" alt="KONIMER" id="profile">
-      <button class="play-btn" id="playBtn">▶</button>
+  <div class="container">
+    <div class="waveform-container">
+      <canvas id="audioCanvas" width="330" height="330"></canvas>
+
+      <div class="profile-wrapper" style="pointer-events:none;">
+        <!-- markaziy statik oltin sher rasm -->
+        <img id="profile" class="profile"
+             src="https://github.com/konimer/konimer.github.io/raw/main/retouch_2025050922553313.jpg"
+             alt="KONIMER">
+        <!-- play tugma - pointer events enabled -->
+        <button id="playBtn" class="play-btn" style="pointer-events:auto;">▶</button>
+      </div>
     </div>
+
+    <h1>KONIMER PREMIUM</h1>
+    <p>Bizning brend sizning biznesingiz uchun mukammal va zamonaviy saytlarni taklif qiladi.</p>
+
+    <a href="https://instagram.com/ru.raximboyev" class="btn" target="_blank">Instagram</a>
+    <a href="tel:+998947370714" class="btn">+998 94 737 07 14</a>
+    <a href="https://t.me/konimer" class="btn" target="_blank">Telegram</a>
+    <a href="https://t.me/+VmvgNbHFGWs4Y2Yy" class="btn" target="_blank">Telegram guruh</a>
   </div>
 
-  <h1>KONIMER PREMIUM</h1>
-  <p>Bizning brend sizning biznesingiz uchun mukammal va zamonaviy saytlarni taklif qiladi.</p>
+  <footer>©2025 KONIMER PREMIUM | RAXIMBOYEV UMIDJON</footer>
 
-  <a href="https://instagram.com/ru.raximboyev" class="btn" target="_blank">Instagram</a>
-  <a href="tel:+998947370714" class="btn">+998 94 737 07 14</a>
-  <a href="https://t.me/konimer" class="btn" target="_blank">Telegram</a>
-  <a href="https://t.me/+VmvgNbHFGWs4Y2Yy" class="btn" target="_blank">Telegram guruh</a>
-</div>
+  <!-- visitor counter -->
+  <div id="visitorCounter"><div class="pulse"></div> <div id="vc-text">Loading...</div></div>
 
-<footer>©2025 KONIMER PREMIUM | RAXIMBOYEV UMIDJON</footer>
+  <!-- audio -->
+  <audio id="bgAudio" loop>
+    <source src="music.mp3" type="audio/mpeg">
+    Sizning brauzeringiz audio elementni qo'llab-quvvatlamaydi.
+  </audio>
 
-<!-- 👁 Hisoblagich -->
-<div id="visitorCounter">Loading...</div>
+  <!-- Firebase (compat) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
-<audio id="bgAudio" loop>
-  <source src="music.mp3" type="audio/mpeg">
-  Sizning brauzeringiz audio elementni qo'llab-quvvatlamaydi.
-</audio>
-
-<!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-
-<script>
-// 🔥 Firebase sozlamalari
-const firebaseConfig = {
-  apiKey: "AIzaSyA49ofwIbHIqTSWqKG0LxrlvcQ2QtnDqFo",
-  authDomain: "konimer-premium.firebaseapp.com",
-  databaseURL: "https://konimer-premium-default-rtdb.firebaseio.com",
-  projectId: "konimer-premium",
-  storageBucket: "konimer-premium.firebasestorage.app",
-  messagingSenderId: "56730390889",
-  appId: "1:56730390889:web:6badaf0e11fc206b63adf8",
-  measurementId: "G-P0FT8G239C"
-};
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
-
-// 👁 Real-time hisoblagich
-function incrementVisitor() {
+  <script>
+  /***** FIREBASE (visitor counter) *****/
+  const firebaseConfig = {
+    apiKey: "AIzaSyA49ofwIbHIqTSWqKG0LxrlvcQ2QtnDqFo",
+    authDomain: "konimer-premium.firebaseapp.com",
+    databaseURL: "https://konimer-premium-default-rtdb.firebaseio.com",
+    projectId: "konimer-premium",
+    storageBucket: "konimer-premium.firebasestorage.app",
+    messagingSenderId: "56730390889",
+    appId: "1:56730390889:web:6badaf0e11fc206b63adf8",
+    measurementId: "G-P0FT8G239C"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
   const counterRef = db.ref('visitorCount');
-  counterRef.transaction(current => (current || 0) + 1);
-}
-function showCounter(count) {
-  document.getElementById('visitorCounter').innerText = `Foydalanuvchi: ${count || 0}`;
-}
-db.ref('visitorCount').on('value', snap => showCounter(snap.val()));
-window.addEventListener('load', incrementVisitor);
+  // increment once per page load
+  window.addEventListener('load', ()=> {
+    counterRef.transaction(c => (c||0) + 1);
+  });
+  // show realtime
+  counterRef.on('value', snap => {
+    document.getElementById('vc-text').textContent = (snap.val()||0) + " ta tashrif";
+  });
 
-// 🎵 Musiqa va animatsiya
-const audio = document.getElementById("bgAudio");
-const canvas = document.getElementById("audioCanvas");
-const ctx = canvas.getContext("2d");
-const profile = document.getElementById("profile");
-const playBtn = document.getElementById("playBtn");
-let audioCtx, analyser, source, bufferLength, dataArray, started=false, playing=false, particles=[], rotation=0;
+  /***** PARTICLES + AUDIO VISUALIZER *****/
+  const audio = document.getElementById('bgAudio');
+  const canvas = document.getElementById('audioCanvas');
+  const ctx = canvas.getContext('2d');
+  const playBtn = document.getElementById('playBtn');
+  const profileImg = document.getElementById('profile');
 
-class Particle{
-  constructor(x,y,color){
-    this.x=x; this.y=y;
-    this.size=Math.random()*4+2;
-    this.speedX=(Math.random()-0.5)*2;
-    this.speedY=(Math.random()-0.5)*2;
-    this.color=color; this.alpha=1;
+  let audioCtx, analyser, sourceNode;
+  let started = false, playing = false;
+  let bufferLength = 0, dataArray;
+  let particles = [];
+  let baseRotation = 0;
+  let width = canvas.width, height = canvas.height;
+  const center = { x: width/2, y: height/2 };
+
+  // mouth offset (relative to canvas center). Adjust if burst origin needs shifting.
+  // These values approximate the mouth position in your lion image. Tweak if needed.
+  const mouthOffset = { x: 18, y: 26 };
+
+  // particle settings
+  const MAX_PARTICLES = 700;
+  const GOLD_A = { r: 184, g:134, b:11 }; // #b8860b
+  const GOLD_B = { r: 255, g:204, b:51 }; // #ffcc33
+
+  class Particle {
+    constructor(x,y,dx,dy,size,life,alpha){
+      this.x = x; this.y = y;
+      this.vx = dx; this.vy = dy;
+      this.size = size;
+      this.life = life; // frames to live
+      this.alpha = alpha;
+      this.age = 0;
+      // color t between 0..1
+      this.t = Math.random()*0.3 + 0.6; // bias to brighter gold
+    }
+    update(){
+      this.x += this.vx;
+      this.y += this.vy;
+      this.vx *= 0.995; this.vy *= 0.995; // slight friction
+      this.age++;
+      this.alpha = Math.max(0, 1 - this.age/this.life);
+    }
+    draw(){
+      const t = this.t;
+      const r = Math.round(GOLD_A.r*(1-t) + GOLD_B.r*t);
+      const g = Math.round(GOLD_A.g*(1-t) + GOLD_B.g*t);
+      const b = Math.round(GOLD_A.b*(1-t) + GOLD_B.b*t);
+      ctx.globalAlpha = this.alpha;
+      // create radial gradient for metallic look
+      const grad = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size*2);
+      grad.addColorStop(0, `rgba(${r},${g},${b},1)`);
+      grad.addColorStop(0.6, `rgba(${r},${g},${b},0.6)`);
+      grad.addColorStop(1, `rgba(0,0,0,0)`);
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI*2);
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    }
   }
-  update(level){ this.x+=this.speedX*level*5; this.y+=this.speedY*level*5; this.alpha-=0.02; }
-  draw(){ ctx.globalAlpha=this.alpha; ctx.fillStyle=this.color; ctx.beginPath(); ctx.arc(this.x,this.y,this.size,0,Math.PI*2); ctx.fill(); ctx.globalAlpha=1;}
-}
 
-function setupCanvas(){ canvas.width=300; canvas.height=300; ctx.clearRect(0,0,canvas.width,canvas.height); }
-
-function getDynamicColor(dataArray){
-  const bass=dataArray.slice(0,bufferLength/3).reduce((a,b)=>a+b,0)/(bufferLength/3);
-  const mid=dataArray.slice(bufferLength/3,2*bufferLength/3).reduce((a,b)=>a+b,0)/(bufferLength/3);
-  const treble=dataArray.slice(2*bufferLength/3).reduce((a,b)=>a+b,0)/(bufferLength/3);
-  const hue=(bass+mid+treble)*0.4;
-  return {haloColor:`hsl(${hue%360},100%,60%)`, particleColor:`hsl(${(hue+180)%360},100%,60%)`};
-}
-
-function drawParticlesAndHalo(){
-  requestAnimationFrame(drawParticlesAndHalo);
-  if(!analyser) return;
-  analyser.getByteFrequencyData(dataArray);
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  const cx=canvas.width/2, cy=canvas.height/2;
-  let sum=0; for(let i=0;i<bufferLength;i++) sum+=dataArray[i];
-  const level=sum/bufferLength/128;
-  const {haloColor, particleColor}=getDynamicColor(dataArray);
-  const baseRadius=110;
-  const haloRadius=baseRadius+level*40;
-  rotation+=0.01;
-  ctx.save();
-  ctx.translate(cx,cy);
-  ctx.rotate(rotation);
-  const gradient=ctx.createRadialGradient(0,0,haloRadius-10,0,0,haloRadius);
-  gradient.addColorStop(0,haloColor.replace('60%','20%'));
-  gradient.addColorStop(1,haloColor.replace('60%','0%'));
-  ctx.fillStyle=gradient;
-  ctx.beginPath();
-  ctx.arc(0,0,haloRadius,0,Math.PI*2); ctx.fill();
-  ctx.restore();
-  const count=Math.floor(level*5);
-  for(let i=0;i<count;i++) particles.push(new Particle(cx,cy,particleColor));
-  for(let i=particles.length-1;i>=0;i--){ const p=particles[i]; p.update(level); p.draw(); if(p.alpha<=0) particles.splice(i,1);}
-}
-
-async function toggleAudio(){
-  if(!started){
-    audioCtx=new(window.AudioContext||window.webkitAudioContext)();
-    source=audioCtx.createMediaElementSource(audio);
-    analyser=audioCtx.createAnalyser();
-    source.connect(analyser); analyser.connect(audioCtx.destination);
-    analyser.fftSize=256;
-    bufferLength=analyser.frequencyBinCount;
-    dataArray=new Uint8Array(bufferLength);
-    setupCanvas(); drawParticlesAndHalo(); started=true;
+  // create particle orbiting positions around the image (mane-like)
+  function spawnOrbitParticles(count){
+    for(let i=0;i<count;i++){
+      if(particles.length > MAX_PARTICLES) break;
+      // spawn near a ring around center (mane)
+      const angle = Math.random()*Math.PI*2;
+      const radius = 90 + (Math.random()*40 - 10); // ring radius (tweakable)
+      const x = center.x + Math.cos(angle)*radius + (Math.random()*10-5);
+      const y = center.y + Math.sin(angle)*radius + (Math.random()*10-5);
+      // small tangential velocity for orbiting
+      const speed = 0.2 + Math.random()*0.8;
+      const dx = -Math.sin(angle)*speed * (0.4 + Math.random()*0.8);
+      const dy = Math.cos(angle)*speed * (0.4 + Math.random()*0.8);
+      const size = 1 + Math.random()*2.5;
+      const life = 200 + Math.random()*100;
+      particles.push(new Particle(x,y,dx,dy,size,life,1));
+    }
   }
-  if(audioCtx.state==='suspended') await audioCtx.resume();
-  if(!playing){ await audio.play(); playBtn.textContent="⏸"; playing=true; }
-  else { audio.pause(); playBtn.textContent="▶"; playing=false; }
-}
 
-playBtn.addEventListener('click',toggleAudio);
-profile.addEventListener('click',toggleAudio);
-window.addEventListener('load',setupCanvas);
-</script>
+  // burst from mouth (o'kirish)
+  function burstFromMouth(strength){
+    const originX = center.x + mouthOffset.x;
+    const originY = center.y + mouthOffset.y;
+    const n = Math.min(120, Math.floor(20 + strength*180)); // burst count depends on strength
+    for(let i=0;i<n;i++){
+      if(particles.length > MAX_PARTICLES) break;
+      const angle = Math.random()*Math.PI*2;
+      const speed = 2 + Math.random()*6 * (0.5 + strength);
+      const dx = Math.cos(angle)*speed;
+      const dy = Math.sin(angle)*speed;
+      const size = 1.5 + Math.random()*3;
+      const life = 80 + Math.random()*60;
+      particles.push(new Particle(originX, originY, dx, dy, size, life, 1));
+    }
+    // also create a quick halo flash
+    flashHalo(strength);
+  }
+
+  // halo flash (brief bright circle)
+  let haloFlashAlpha = 0;
+  function flashHalo(strength){
+    haloFlashAlpha = Math.min(1, 0.2 + strength*0.8);
+  }
+
+  // main draw loop
+  function draw(){
+    requestAnimationFrame(draw);
+    // clear with slight fade for motion blur
+    ctx.fillStyle = 'rgba(0,0,0,0.25)';
+    ctx.fillRect(0,0,width,height);
+
+    // draw subtle vignette around center (dark)
+    const vignette = ctx.createRadialGradient(center.x, center.y, 0, center.x, center.y, Math.max(width,height)/1.1);
+    vignette.addColorStop(0, 'rgba(0,0,0,0)');
+    vignette.addColorStop(1, 'rgba(0,0,0,0.45)');
+    ctx.fillStyle = vignette;
+    ctx.fillRect(0,0,width,height);
+
+    // draw orbit particles
+    for(let i=particles.length-1;i>=0;i--){
+      const p = particles[i];
+      p.update();
+      p.draw();
+      if(p.age > p.life) particles.splice(i,1);
+    }
+
+    // draw halo behind image (metallic glow)
+    const avg = getAverageLevel();
+    const haloRadius = 100 + avg * 45;
+    ctx.save();
+    ctx.translate(center.x, center.y);
+    baseRotation += 0.002 + avg*0.03;
+    ctx.rotate(baseRotation);
+    const g = ctx.createRadialGradient(0,0,haloRadius*0.4, 0,0, haloRadius);
+    g.addColorStop(0, `rgba(255,230,160, ${0.06 + haloFlashAlpha*0.8})`);
+    g.addColorStop(0.6, `rgba(184,134,11, ${0.04 + haloFlashAlpha*0.6})`);
+    g.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.arc(0,0,haloRadius,0,Math.PI*2); ctx.fill();
+    ctx.restore();
+
+    // slowly spawn orbit particles depending on avg level
+    const spawnCount = Math.floor(1 + avg*6);
+    spawnOrbitParticles(spawnCount);
+
+    // decay halo flash
+    haloFlashAlpha *= 0.92;
+  }
+
+  // Returns average level 0..1 from analyser if available
+  function getAverageLevel(){
+    if(!analyser) return 0;
+    analyser.getByteFrequencyData(dataArray);
+    let sum=0;
+    for(let i=0;i<dataArray.length;i++) sum += dataArray[i];
+    const avg = (sum / dataArray.length) / 255; // 0..1
+    return avg;
+  }
+
+  // compute bass strength (0..1) by summing low-frequency bins
+  function getBassStrength(){
+    if(!analyser) return 0;
+    analyser.getByteFrequencyData(dataArray);
+    const bassCount = Math.max(2, Math.floor(dataArray.length * 0.12)); // low ~12% bins
+    let sum = 0;
+    for(let i=0;i<bassCount;i++) sum += dataArray[i];
+    const avg = (sum / bassCount) / 255;
+    return avg;
+  }
+
+  // animation that checks audio and triggers bursts
+  function audioLoop(){
+    if(!analyser) { requestAnimationFrame(audioLoop); return; }
+    const bass = getBassStrength();
+    // threshold: stronger value => burst
+    if(bass > 0.28){
+      // burst intensity scaled
+      burstFromMouth(Math.min(1, (bass-0.28)/0.6 + 0.2));
+    }
+    // schedule next check
+    setTimeout(audioLoop, 120); // check ~8-9 times per second
+  }
+
+  // initialize audio context + analyser
+  async function startAudioProcessing(){
+    if(started) return;
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    sourceNode = audioCtx.createMediaElementSource(audio);
+    analyser = audioCtx.createAnalyser();
+    analyser.fftSize = 512;
+    bufferLength = analyser.frequencyBinCount;
+    dataArray = new Uint8Array(bufferLength);
+    sourceNode.connect(analyser);
+    analyser.connect(audioCtx.destination);
+    started = true;
+    audioLoop();
+  }
+
+  // play/pause toggle
+  async function togglePlay(){
+    if(!started) await startAudioProcessing();
+    if(audioCtx.state === 'suspended') await audioCtx.resume();
+    if(!playing){
+      await audio.play().catch(()=>{ /* autoplay blocked by browser—user must tap */ });
+      playBtn.textContent = '⏸';
+      playing = true;
+    } else {
+      audio.pause();
+      playBtn.textContent = '▶';
+      playing = false;
+    }
+  }
+
+  // click handlers
+  playBtn.addEventListener('click', togglePlay);
+  profileImg.addEventListener('click', togglePlay);
+
+  // responsive canvas sizing
+  function resizeCanvas(){
+    // use element width/height to scale canvas pixel size for crispness
+    const rect = canvas.getBoundingClientRect();
+    width = Math.round(rect.width);
+    height = Math.round(rect.height);
+    canvas.width = width;
+    canvas.height = height;
+    center.x = width/2;
+    center.y = height/2;
+  }
+  window.addEventListener('resize', ()=>{
+    resizeCanvas();
+  });
+
+  // initial setup
+  resizeCanvas();
+  // a gentle starter particle set for initial look
+  spawnOrbitParticles(80);
+  draw();
+
+  // NOTE: if you want the burst origin adjusted, tweak mouthOffset.x/y above.
+  // You can also reduce MAX_PARTICLES if performance issues on low-end devices.
+  </script>
 </body>
 </html>
